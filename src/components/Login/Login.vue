@@ -1,6 +1,6 @@
 <template>
 	<section>
-		<v-dialog v-model="show">
+		<v-dialog v-model="show" @click:outside="close">
 			<auth-form>
 				<h2 class="text-center my-3">Log in</h2>
 				<v-text-field outlined label="Email Address *"></v-text-field>	
@@ -10,7 +10,7 @@
 
 				<template #footer>
 					<router-link class="link" to="recover">Forgot Password?</router-link>
-					<router-link class="link" to="signup">Don't have an account, Sign up</router-link>
+					<p class="link" @click="showSignup">Don't have an account, Sign up</p>
 				</template>
 			</auth-form>
 		</v-dialog>
@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 
 import AuthForm from '@/components/AuthForm/AuthForm.vue';
 
@@ -29,6 +29,14 @@ import AuthForm from '@/components/AuthForm/AuthForm.vue';
 })
 export default class Login extends Vue {
 	@Prop({ default: false }) show!: boolean;
+
+	private close() {
+		this.$emit('close');
+	}
+
+	private showSignup() {
+		this.$emit('show-signup');
+	}
 }
 </script>
 

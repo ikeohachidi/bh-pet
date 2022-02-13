@@ -8,7 +8,7 @@
 
 		<slot></slot>
 
-		<p class="mt-5 d-flex justify-space-between">
+		<p class="footer mt-5 mb-0 d-flex">
 			<slot name="footer"></slot>
 		</p>
 	</v-card>
@@ -40,9 +40,10 @@ export default class AuthForm extends Vue {
 	}
 }
 
-.link {
-	text-decoration: none;
-	color: var(--color-blue);
+.footer {
+	display: flex;
+	justify-content: space-between;
+	cursor: pointer;
 }
 
 h2 {

@@ -1,15 +1,15 @@
 <template>
 	<section>
-		<v-dialog v-model="show">
+		<v-dialog v-model="show" @click:outside="close">
 			<auth-form>
 				<h2 class="text-center my-3">Signup</h2>
 				<v-row>
 					<v-col>
 						<v-text-field outlined label="Email Address *"></v-text-field>	
 					</v-col>
-					<v-co>
+					<v-col>
 						<v-text-field outlined label="Last Name*"></v-text-field>	
-					</v-co>
+					</v-col>
 				</v-row>
 				<v-text-field outlined label="Email Address *"></v-text-field>	
 				<v-text-field outlined label="Password*" type="password"></v-text-field>	
@@ -18,7 +18,7 @@
 				<v-btn class="w-100" width="100%" depressed color="primary">sign up</v-btn>
 
 				<template #footer>
-					<p class="link" @click="showSignup">Already have an account? Login</p>
+					<p class="link mx-auto mb-0" @click="showLogin">Already have an account? Login</p>
 				</template>
 			</auth-form>
 		</v-dialog>
@@ -38,8 +38,12 @@ import AuthForm from '@/components/AuthForm/AuthForm.vue';
 export default class Signup extends Vue {
 	@Prop({ default: false }) show!: boolean;
 
-	private showSignup() {
-		this.$emit('show-signup')
+	private close() {
+		this.$emit('close');
+	}
+
+	private showLogin() {
+		this.$emit('show-login');
 	}
 }
 </script>
