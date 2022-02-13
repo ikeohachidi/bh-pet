@@ -1,6 +1,7 @@
 :root {
 	--color-primary: #4EC690;
 	--color-blue: #1976D2;
+	--color-text: rgba(0, 0, 0, 0.54);
 }
 
 body {
@@ -9,6 +10,15 @@ body {
 	margin: 0;
 }
 
+p {
+	color: var(--color-text);
+}
+
 .v-dialog {
 	box-shadow: none;
+}
+
+.link, a.link {
+	color: var(--color-blue) !important;
+	text-decoration: none;
 }
