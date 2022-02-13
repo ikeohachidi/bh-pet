@@ -20,7 +20,7 @@
 		</div>
 		<v-spacer></v-spacer>
 	
-		<v-btn class="mr-2" outlined large @click="showCart">
+		<v-btn class="mr-2" outlined large @click="goToCartPage">
 			<v-icon>mdi-cart</v-icon>
 			Cart
 			(0)
@@ -37,8 +37,8 @@ import { Vue, Component } from 'vue-property-decorator';
 
 @Component
 export default class Navbar extends Vue {
-	private showCart() {
-		this.$emit('show-cart');
+	private goToCartPage() {
+		this.$router.push({ name: 'cart' });
 	}
 
 	private showLogin() {
