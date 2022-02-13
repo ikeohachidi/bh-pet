@@ -25,7 +25,10 @@
 			Cart
 			(0)
 		</v-btn>
-		<v-btn outlined large @click="showLogin">Login</v-btn>
+		<v-btn class="mr-2" outlined large @click="showLogin">Login</v-btn>
+		<v-avatar color="info" size="35" @click="showUserSettings" class="pointer">
+			<span>CI</span>
+		</v-avatar>
 	</v-app-bar>
 </template>
 
@@ -40,6 +43,10 @@ export default class Navbar extends Vue {
 
 	private showLogin() {
 		this.$emit('show-login');
+	}
+
+	private showUserSettings() {
+		this.$emit('show-user-settings');
 	}
 }
 </script>
