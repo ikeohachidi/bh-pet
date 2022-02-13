@@ -7,6 +7,8 @@
 		<v-main>
 			<router-view/>
 		</v-main>
+
+		<Footer/>
 	</v-app>
 </template>
 
@@ -16,12 +18,14 @@ import { Vue, Component } from 'vue-property-decorator';
 import Navbar from '@/components/Navbar/Navbar.vue';
 import Login from '@/components/Login/Login.vue';
 import Signup from '@/components/Signup/Signup.vue';
+import Footer from '@/components/Footer/Footer.vue';
 
 @Component({
 	components: {
 		Navbar,
 		Login,
-		Signup
+		Signup,
+		Footer
 	}
 })
 export default class App extends Vue {
