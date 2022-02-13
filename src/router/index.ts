@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Home from '../views/Home.vue'
 import Cart from '../views/Cart.vue'
+import Checkout from '../views/Checkout.vue'
 
 Vue.use(VueRouter)
 
@@ -26,11 +27,19 @@ const routes: Array<RouteConfig> = [
 	},
 	{
 		path: '/cart',
-		name: 'cart',
+		name: 'Cart',
 		meta: {
 			crumb: 'Your Cart'
 		},
 		component: Cart 
+	},
+	{
+		path: '/checkout',
+		name: 'Checkout',
+		meta: {
+			crumb: 'Your Cart'
+		},
+		component: Checkout 
 	}
 ]
 

@@ -7,7 +7,7 @@
 
 					<cart-item class="my-5"/>
 
-					<v-btn width="100%" color="primary">proceed to checkout</v-btn>
+					<v-btn width="100%" color="primary" to="checkout">proceed to checkout</v-btn>
 				</v-col>
 			</v-row>
 		</v-container>
