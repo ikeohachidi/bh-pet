@@ -1,0 +1,48 @@
+<template>
+	<section>
+		<v-data-table
+			:headers="tableHeaders"
+			:items="products"
+			:items-per-page="8"
+			class="elevation-1"
+		>
+			<template #top>
+				<div class="d-flex justify-space-between pt-3 px-4">
+					<h3 class="text-h7">All products</h3>
+					<div class="d-flex">
+						<v-btn color="primary" dense>
+							<v-icon>mdi-plus</v-icon>
+							add new product 
+						</v-btn>
+						
+					</div>
+				</div>
+			</template>
+			<template #item.status="{ item }">
+				<v-chip :color="getStatusColor(item.status)">
+					<span class="item-status">{{ item.status }}</span>
+				</v-chip>
+			</template>
+		</v-data-table>
+	</section>
+</template>
+
+<script lang="ts">
+import { Vue, Component } from 'vue-property-decorator';
+
+@Component
+export default class Products extends Vue {
+	private tableHeaders = [
+		{ text: 'Image', value: 'image' },
+		{ text: 'Name', value: 'name' },
+		{ text: 'Brand', value: 'brand' },
+		{ text: 'Category', value: 'category' },
+		{ text: 'Date Created', value: 'date' },
+	];
+
+	private products = []
+}
+</script>
+
+<style scoped>
+</style>
