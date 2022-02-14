@@ -1,8 +1,7 @@
 <template>
 	<section>
-		<div class="w-100 d-flex justify-space-between py-4">
-			<h1>Shipment Locator</h1>
-		</div>
+		<admin-title></admin-title>
+		
 		<v-data-table
 			:headers="salesHeaders"
 			:items="sales"

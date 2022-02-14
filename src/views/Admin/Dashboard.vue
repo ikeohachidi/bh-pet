@@ -1,9 +1,7 @@
 <template>
 	<section>
-		<div class="w-100 d-flex justify-space-between py-4">
-			<h1>Dashboard</h1>
-
-			<div class="d-flex">
+		<admin-title>	
+			<template #append>
 				<v-chip 
 					v-for="range in timeRange"
 					:key="range"
@@ -11,8 +9,8 @@
 					@click="activeTimeRange = range"
 					:color="activeTimeRange === range ? 'blue' : ''"
 				>{{ range }}</v-chip>
-			</div>
-		</div>
+			</template>
+		</admin-title>
 
 		<div class="sales-data">
 			<v-card v-for="sale in accumulatedSales" :key="sale.icon" class="pa-3">

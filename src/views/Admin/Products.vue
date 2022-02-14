@@ -1,5 +1,7 @@
 <template>
 	<section>
+		<admin-title></admin-title>
+
 		<v-data-table
 			:headers="tableHeaders"
 			:items="products"

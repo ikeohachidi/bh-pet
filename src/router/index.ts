@@ -60,18 +60,30 @@ const routes: Array<RouteConfig> = [
 			{ 
 				path: '/',
 				component: () => (/* webpackChunkName: admin */ import("@/views/Admin/Dashboard.vue")),
+				meta: {
+					title: 'Dashboard'
+				}
 			},
 			{ 
 				path: '/shipment',
 				component: () => (/* webpackChunkName: admin */ import("@/views/Admin/Shipment.vue")),
+				meta: {
+					title: 'Shipment Locator'
+				}
 			},
 			{ 
 				path: '/customers',
 				component: () => (/* webpackChunkName: admin */ import("@/views/Admin/Customers.vue")),
+				meta: {
+					title: 'Customers'
+				}
 			},
 			{ 
 				path: '/products',
 				component: () => (/* webpackChunkName: admin */ import("@/views/Admin/Products.vue")),
+				meta: {
+					title: 'Products'
+				}
 			}
 		]
 	}
