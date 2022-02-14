@@ -40,6 +40,23 @@ const routes: Array<RouteConfig> = [
 			crumb: 'Your Cart'
 		},
 		component: Checkout 
+	},
+	{
+		path: '/cateogory',
+		name: 'Category',
+		component: Category 
+	},
+	{
+		path: '/admin',
+		name: 'Admin',
+		// component: Admin,
+		component: () => (/* webpackChunkName: admin */ import("@/views/Admin/Index.vue")),
+		children: [
+			{ 
+				path: '/',
+				component: () => (/* webpackChunkName: admin */ import("@/views/Admin/Dashboard.vue")),
+			}
+		]
 	}
 ]
 
