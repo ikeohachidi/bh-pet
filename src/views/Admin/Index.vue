@@ -3,7 +3,7 @@
 		<div>
 			<v-navigation-drawer class="elevation-1">
 				<v-list nav>
-					<v-list-item link v-for="route in adminRoutes" :key="route.text">
+					<v-list-item link v-for="route in adminRoutes" :key="route.text" :to="route.path">
 						<v-list-item-icon>
 							<v-icon>mdi-{{ route.icon }}</v-icon>
 						</v-list-item-icon>
@@ -34,7 +34,7 @@ export default class AdminIndex extends Vue {
 	private adminRoutes = [
 		{ text: 'Dashboard', icon: 'tune', path: '/admin' },
 		{ text: 'All Tickets', icon: 'subtitles', path: '/tickets' },
-		{ text: 'Shipment Locator', icon: 'map-marker', path: '/locator' },
+		{ text: 'Shipment Locator', icon: 'map-marker', path: '/shipment' },
 		{ text: 'Customers', icon: 'account-multiple-outline', path: '/customers' },
 		{ text: 'Products', icon: 'folder-outline', path: '/products' },
 	]
