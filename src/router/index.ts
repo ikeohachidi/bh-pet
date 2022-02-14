@@ -64,6 +64,11 @@ const routes: Array<RouteConfig> = [
 			{ 
 				path: '/shipment',
 				component: () => (/* webpackChunkName: admin */ import("@/views/Admin/Shipment.vue")),
+			},
+			{ 
+				path: '/customers',
+				component: () => (/* webpackChunkName: admin */ import("@/views/Admin/Customers.vue")),
+			},
 			}
 		]
 	}
