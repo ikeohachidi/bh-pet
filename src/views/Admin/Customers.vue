@@ -2,6 +2,8 @@
 	<section>
 		<admin-title></admin-title>
 
+		<CustomerForm :show="showCustomerForm" @close="showCustomerForm = false" />
+
 		<v-data-table
 			:headers="tableHeaders"
 			:items="customers"
@@ -77,7 +79,7 @@
 							</v-chip>
 						</td>
 						<td class="actions">
-							<v-btn icon depressed>
+							<v-btn icon depressed @click="showCustomerForm = true">
 								<v-icon>mdi-pencil</v-icon>
 							</v-btn>
 							<v-btn icon depressed class="mx-3">
@@ -96,8 +98,13 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+import CustomerForm from '@/components/CustomerForm/CustomerForm.vue'
 
-@Component
+@Component({
+	components: {
+		CustomerForm
+	}
+})
 export default class Customers extends Vue {
 	private tableHeaders = [
 		{ text: 'Name', value: 'name' },
@@ -110,6 +117,7 @@ export default class Customers extends Vue {
 	]
 
 	private showTableOptions = false;
+	private showCustomerForm = false;
 
 	private customers = [
 		{
