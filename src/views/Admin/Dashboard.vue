@@ -2,13 +2,7 @@
 	<section>
 		<admin-title>	
 			<template #append>
-				<v-chip 
-					v-for="range in timeRange"
-					:key="range"
-					class="mx-2"
-					@click="activeTimeRange = range"
-					:color="activeTimeRange === range ? 'blue' : ''"
-				>{{ range }}</v-chip>
+				<period-chips v-model="activePeriod"></period-chips>
 			</template>
 		</admin-title>
 
@@ -48,8 +42,7 @@ import { Vue, Component } from 'vue-property-decorator';
 
 @Component
 export default class Dashboard extends Vue {
-	private timeRange = ['today', 'monthly', 'yearly'];
-	private activeTimeRange = 'today';
+	private activePeriod = 'today';
 
 	private accumulatedSales = [
 		{ total: '$2.403', icon: 'currency-usd', desc: 'Total Earnings' },
@@ -86,5 +79,7 @@ export default class Dashboard extends Vue {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
 	gap: 2.5em;
+	background-color: #EEF5F2;
+	padding: 24px;
 }
 </style>
