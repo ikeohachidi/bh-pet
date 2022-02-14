@@ -7,7 +7,11 @@ import '@/styles/main.scss';
 import 'remixicon/fonts/remixicon.css';
 import vuetify from './plugins/vuetify'
 
+import PeriodChips from '@/components/PeriodChips/PeriodChips.vue';
+
 Vue.config.productionTip = false
+
+Vue.component('period-chips', PeriodChips);
 
 new Vue({
   router,
