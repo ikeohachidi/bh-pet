@@ -8,10 +8,12 @@ import 'remixicon/fonts/remixicon.css';
 import vuetify from './plugins/vuetify'
 
 import PeriodChips from '@/components/PeriodChips/PeriodChips.vue';
+import AdminTitle from '@/components/AdminTitle/AdminTitle.vue';
 
 Vue.config.productionTip = false
 
 Vue.component('period-chips', PeriodChips);
+Vue.component('admin-title', AdminTitle);
 
 new Vue({
   router,
