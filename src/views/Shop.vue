@@ -7,10 +7,11 @@
 						label="Search Products"
 						outlined
 					></v-text-field>
+
+					<router-link to="/shop/dog-food" class="category text-h2">Dry dog food</router-link>
 				</v-col>
 			</v-row>
 		</v-container>
-		<router-view></router-view>
 	</section>
 </template>
 
