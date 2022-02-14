@@ -15,7 +15,13 @@
 			</v-navigation-drawer>
 		</div>
 		<div class="admin-sub-pages">
-			<router-view></router-view>
+			<v-container>
+				<v-row>
+					<v-col cols="8" class="mx-auto">
+						<router-view></router-view>
+					</v-col>
+				</v-row>
+			</v-container>
 		</div>
 	</section>
 </template>

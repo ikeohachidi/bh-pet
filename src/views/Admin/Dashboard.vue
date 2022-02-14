@@ -1,52 +1,46 @@
 <template>
 	<section>
-		<v-container class="w-100">
-			<v-row>
-				<v-col cols="8" class="mx-auto">
-					<div class="w-100 d-flex justify-space-between py-4">
-						<h1>Dashboard</h1>
+		<div class="w-100 d-flex justify-space-between py-4">
+			<h1>Dashboard</h1>
 
-						<div class="d-flex">
-							<v-chip 
-								v-for="range in timeRange"
-								:key="range"
-								class="mx-2"
-								@click="activeTimeRange = range"
-								:color="activeTimeRange === range ? 'blue' : ''"
-							>{{ range }}</v-chip>
-						</div>
-					</div>
+			<div class="d-flex">
+				<v-chip 
+					v-for="range in timeRange"
+					:key="range"
+					class="mx-2"
+					@click="activeTimeRange = range"
+					:color="activeTimeRange === range ? 'blue' : ''"
+				>{{ range }}</v-chip>
+			</div>
+		</div>
 
-					<div class="sales-data">
-						<v-card v-for="sale in accumulatedSales" :key="sale.icon" class="pa-3">
-							<div class="d-flex justify-space-between items-center">
-								<h6 class="d-inline-flex text-h6">{{ sale.total }}</h6>
-								<v-icon color="primary">mdi-{{ sale.icon }}</v-icon>
-							</div>
-							<p class="mb-0 mt-3">{{ sale.desc }}</p>
-						</v-card>
-					</div>
+		<div class="sales-data">
+			<v-card v-for="sale in accumulatedSales" :key="sale.icon" class="pa-3">
+				<div class="d-flex justify-space-between items-center">
+					<h6 class="d-inline-flex text-h6">{{ sale.total }}</h6>
+					<v-icon color="primary">mdi-{{ sale.icon }}</v-icon>
+				</div>
+				<p class="mb-0 mt-3">{{ sale.desc }}</p>
+			</v-card>
+		</div>
 
-					<div class="mt-10">
-						<v-data-table
-							:headers="salesHeaders"
-							:items="sales"
-							:items-per-page="5"
-							class="elevation-1"
-						>
-							<template #top>
-								<h3 class="pt-3 px-4 text-h7">Latest Sales</h3>
-							</template>
-							<template #item.status="{ item }">
-								<v-chip :color="getStatusColor(item.status)">
-									<span class="item-status">{{ item.status }}</span>
-								</v-chip>
-							</template>
-						</v-data-table>
-					</div>
-				</v-col>
-			</v-row>
-		</v-container>
+		<div class="mt-10">
+			<v-data-table
+				:headers="salesHeaders"
+				:items="sales"
+				:items-per-page="5"
+				class="elevation-1"
+			>
+				<template #top>
+					<h3 class="pt-3 px-4 text-h7">Latest Sales</h3>
+				</template>
+				<template #item.status="{ item }">
+					<v-chip :color="getStatusColor(item.status)">
+						<span class="item-status">{{ item.status }}</span>
+					</v-chip>
+				</template>
+			</v-data-table>
+		</div>
 	</section>
 </template>
 
