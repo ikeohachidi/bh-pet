@@ -1,19 +1,25 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
-import Home from '../views/Home.vue'
+import Shop from '../views/Shop.vue'
+import Category from '../views/Category.vue';
 import Cart from '../views/Cart.vue'
 import Checkout from '../views/Checkout.vue'
 
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
-	{
+	{ 
 		path: '/',
-		name: 'Home',
-		meta: {
-			crumb: 'Homepage'
-		},
-		component: Home
+		redirect: '/shop'
+	},
+	{
+		path: '/shop',
+		name: 'Shop',
+		component: Shop,
+	},
+	{ 
+		path: '/shop/:id', 
+		component: Category 
 	},
 	{
 		path: '/recover',
