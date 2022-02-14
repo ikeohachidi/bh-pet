@@ -63,10 +63,32 @@
 					</div>
 				</div>
 			</template>
-			<template #item.status="{ item }">
-				<v-chip :color="getStatusColor(item.status)">
-					<span class="item-status">{{ item.status }}</span>
-				</v-chip>
+			<template #body="{ items }">
+				<tbody>
+					<tr v-for="item in items" :key="item.name">
+						<td>{{ item.name }}</td>
+						<td>{{ item.email }}</td>
+						<td>{{ item.phone }}</td>
+						<td>{{ item.address }}</td>
+						<td>{{ item.date }}</td>
+						<td>
+							<v-chip :color="item.preference ? 'blue' : 'yello'">
+								{{ item.preference ? 'Yes' : 'No' }}
+							</v-chip>
+						</td>
+						<td class="actions">
+							<v-btn icon depressed>
+								<v-icon>mdi-pencil</v-icon>
+							</v-btn>
+							<v-btn icon depressed class="mx-3">
+								<v-icon>mdi-delete</v-icon>
+							</v-btn>
+							<v-btn icon depressed>
+								<v-icon>mdi-dots-vertical</v-icon>
+							</v-btn>
+						</td>
+					</tr>
+				</tbody>
 			</template>
 		</v-data-table>
 	</section>
@@ -83,12 +105,22 @@ export default class Customers extends Vue {
 		{ text: 'Phone', value: 'phone' },
 		{ text: 'Address', value: 'address' },
 		{ text: 'Date Created', value: 'date' },
-		{ text: 'Marketing Preferences', value: 'preference' }
+		{ text: 'Marketing Preferences', value: 'preference' },
+		{ text: '', value: 'action' }
 	]
 
 	private showTableOptions = false;
 
-	private customers = [];
+	private customers = [
+		{
+			name: 'Tom Cruise'	,
+			email: 'tomcruise@gmail.com',
+			phone: '(947) 000 000',
+			address: 'Somewhere on earth',
+			date: '2020',
+			preference: true
+		}
+	];
 }
 </script>
 
@@ -110,5 +142,20 @@ export default class Customers extends Vue {
 
 .rotate {
 	transform: rotateZ(180deg);
+}
+
+tr {
+	&:hover {
+		background-color: var(--color-primary-highlight) !important;
+
+		.actions {
+			opacity: 1;
+		}
+	}
+
+	.actions {
+		opacity: 0;
+		transition: .2s;
+	}
 }
 </style>
