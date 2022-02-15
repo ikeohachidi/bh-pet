@@ -98,10 +98,10 @@ const store = {
 const { dispatch } = getStoreAccessors<State, RootState>("products");
 const { actions } = store;
 
-const createProduct = dispatch(actions.createProduct);
-const deleteProduct = dispatch(actions.deleteProduct);
-const editProduct = dispatch(actions.editProduct);
-const getProduct = dispatch(actions.getProduct);
-const listProducts = dispatch(actions.listProducts);
+export const createProduct = dispatch(actions.createProduct);
+export const deleteProduct = dispatch(actions.deleteProduct);
+export const editProduct = dispatch(actions.editProduct);
+export const getProduct = dispatch(actions.getProduct);
+export const listProducts = dispatch(actions.listProducts);
 
 export default store;
