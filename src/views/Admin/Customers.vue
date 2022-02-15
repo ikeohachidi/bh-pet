@@ -144,7 +144,7 @@ export default class Customers extends Vue {
 		top: 100%;
 		left: 0;
 		z-index: 10;
-		width: 100;
+		width: 100%;
 	}
 }
 
