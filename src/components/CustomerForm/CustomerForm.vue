@@ -26,7 +26,7 @@
 			></v-text-field>
 			<v-text-field
 				label="Confirm Password"
-				 outlined
+				outlined
 				:append-icon="showConfirmPassword ? 'mdi-eye' : 'mdi-eye-off'"
 				:type="showConfirmPassword ? 'text' : 'password'"
 				@click:append="showConfirmPassword = !showConfirmPassword"

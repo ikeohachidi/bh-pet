@@ -2,6 +2,8 @@
 	<section>
 		<admin-title></admin-title>
 
+		<ProductForm :show="showProductForm" @close="showProductForm = false" />
+
 		<v-data-table
 			:headers="tableHeaders"
 			:items="products"
@@ -12,7 +14,7 @@
 				<div class="table-header d-flex justify-space-between align-center pl-5">
 					<h3 class="text-h7 mr-auto">All Products</h3>
 
-					<v-btn color="primary" depressed dense>
+					<v-btn color="primary" depressed dense @click="showProductForm = true">
 						<v-icon>mdi-plus</v-icon>
 						add new product
 					</v-btn>
@@ -58,7 +60,7 @@
 						<td>{{ item.category }}</td>
 						<td>{{ item.date }}</td>
 						<td class="actions">
-							<v-btn icon depressed @click="showCustomerForm = true">
+							<v-btn icon depressed @click="showProductForm = true">
 								<v-icon>mdi-pencil</v-icon>
 							</v-btn>
 							<v-btn icon depressed class="mx-3">
@@ -78,9 +80,16 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 
-@Component
+import ProductForm from '@/components/ProductForm/ProductForm.vue';
+
+@Component({
+	components: {
+		ProductForm
+	}
+})
 export default class Products extends Vue {
 	private showTableOptions = false;
+	private showProductForm = false;
 
 	private tableHeaders = [
 		{ text: 'Image', value: 'image' },
@@ -91,7 +100,9 @@ export default class Products extends Vue {
 		{ text: '', value: 'action' }
 	];
 
-	private products = []
+	private products = [
+		{ image: '', name: 'Stuff', brand: 'On God', category: 'Nestle', date: 'May 25, 2019' }
+	]
 }
 </script>
 
