@@ -42,7 +42,7 @@ const store = {
 		},
 		getProduct(context: Context, uuid: string): Promise<void> {
 			return new Promise((resolve, reject) => {
-				http.get<HTTPResponse<void>>(`/products/${uuid}`)
+				http.get<HTTPResponse<void>>(`/product/${uuid}`)
 					.then(({ data }) => {
 						if (data.success) {
 							resolve();
@@ -55,7 +55,7 @@ const store = {
 		},
 		deleteProduct(context: Context, uuid: string): Promise<void> {
 			return new Promise((resolve, reject) => {
-				http.delete<HTTPResponse<void>>(`/products/${uuid}`)
+				http.delete<HTTPResponse<void>>(`/product/${uuid}`)
 					.then(({ data }) => {
 						if (data.success) {
 							resolve();
@@ -68,7 +68,7 @@ const store = {
 		},
 		editProduct(context: Context, product: Product): Promise<void> {
 			return new Promise((resolve, reject) => {
-				http.put<HTTPResponse<void>>(`/products/${product.uuid}`)
+				http.put<HTTPResponse<void>>(`/product/${product.uuid}`)
 					.then(({ data }) => {
 						if (data.success) {
 							resolve();
@@ -81,7 +81,7 @@ const store = {
 		},
 		createProduct(context: Context, product: Product): Promise<void> {
 			return new Promise((resolve, reject) => {
-				http.post<HTTPResponse<void>>(`/products/create`, product)
+				http.post<HTTPResponse<void>>(`/product/create`, product)
 					.then(({ data }) => {
 						if (data.success) {
 							resolve();
