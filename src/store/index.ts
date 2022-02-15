@@ -4,11 +4,13 @@ import Vuex from 'vuex'
 import Admin, { State as AdminState } from './modules/admin';
 import User, { State as UserState } from './modules/user';
 import Product, { State as ProductState } from './modules/products';
+import Payment, { State as PaymentState } from './modules/payments';
 
 export type RootState = {
 	admin: AdminState,
 	user: UserState,
-	products: ProductState
+	products: ProductState,
+	payment: PaymentState
 }
 
 Vue.use(Vuex)
@@ -17,6 +19,7 @@ export default new Vuex.Store({
 	modules: {
 		admin: Admin,
 		user: User,
-		products: Product
+		products: Product,
+		payment: Payment
 	}
 })
