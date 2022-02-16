@@ -24,12 +24,13 @@ const store = {
 		},
 	},
 	actions: {
-		login(context: Context, credential: Credential): Promise<string> {
+		logIn(context: Context, credential: Credential): Promise<string> {
 			return new Promise((resolve, reject) => {
 				http.post<HTTPResponse<{ token: string }>>("/admin/login", credential)
 					.then(({ data }) => {
 						if (data.success) {
 							context.commit('setToken', data.data.token)
+							resolve(data.data.token);
 						} else {
 							reject(data.error);
 						}
@@ -83,7 +84,7 @@ const store = {
 const { dispatch } = getStoreAccessors<State, RootState>("admin");
 const { actions } = store;
 
-export const logIn = dispatch(actions.login);
+export const logIn = dispatch(actions.logIn);
 export const logOut = dispatch(actions.logOut);
 export const getAllUsers = dispatch(actions.getAllUsers);
 export const deleteUser = dispatch(actions.deleteUser);

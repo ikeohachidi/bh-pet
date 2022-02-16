@@ -65,6 +65,14 @@ const routes: Array<RouteConfig> = [
 				}
 			},
 			{ 
+				path: 'login',
+				component: () => (/* webpackChunkName: admin */ import("@/views/Admin/Login.vue")),
+				meta: {
+					title: 'Login',
+					showNavigation: false
+				}
+			},
+			{ 
 				path: '/shipment',
 				component: () => (/* webpackChunkName: admin */ import("@/views/Admin/Shipment.vue")),
 				meta: {
