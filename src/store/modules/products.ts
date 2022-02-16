@@ -18,6 +18,13 @@ const state: State = {
 const store = {
 	namespaced: true,
 	state,
+	getters: {
+		getProductsByCategoryId(state: State): (uuid: string) => Product[] {
+			return (uuid: string) => {
+				return state.products.filter(product => product.category_uuid === uuid);
+			}
+		}
+	},
 	mutations: {
 		addProduct(state: State, product: Product): void {
 			state.products.push(product);
@@ -27,16 +34,12 @@ const store = {
 		},
 	},
 	actions: {
-		listProducts(context: Context, products: Product[]): Promise<void> {
+		fetchProducts(context: Context): Promise<Product[]> {
 			return new Promise((resolve, reject) => {
-				http.get<HTTPResponse<void>>("/products")
+				http.get<HTTPResponse<Product[]>>("/products")
 					.then(({ data }) => {
-						if (data.success) {
-							context.commit('setProducts', products)
-							resolve();
-						} else {
-							reject(data.error);
-						}
+						context.commit('setProducts', data.data)
+						resolve(data.data);
 					})
 					.catch((error) => reject(error))
 			})
@@ -96,13 +99,14 @@ const store = {
 	}
 }
 
-const { dispatch } = getStoreAccessors<State, RootState>("products");
-const { actions } = store;
+const { dispatch, read } = getStoreAccessors<State, RootState>("products");
+const { actions, getters } = store;
 
+export const getProductsByCategoryId = read(getters.getProductsByCategoryId);
 export const createProduct = dispatch(actions.createProduct);
 export const deleteProduct = dispatch(actions.deleteProduct);
 export const editProduct = dispatch(actions.editProduct);
 export const getProduct = dispatch(actions.getProduct);
-export const listProducts = dispatch(actions.listProducts);
+export const fetchProducts = dispatch(actions.fetchProducts);
 
 export default store;
