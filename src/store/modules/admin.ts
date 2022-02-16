@@ -4,23 +4,34 @@ import { getStoreAccessors } from 'vuex-typescript';
 import http, { HTTPResponse } from '../http';
 import { RootState } from '..';
 import Credential from '@/models/Credential';
+import User from '@/types/User';
 
 export type State = {
 	token: string;
+	users: User[]
 }
 
 type Context = ActionContext<State, RootState>;
 
 const state: State = {
-	token: '' 
+	token: '',
+	users: []
 } 
 
 const store = {
 	namespaced: true,
 	state,
+	getters: {
+		users(state: State): User[] {
+			return state.users;
+		}
+	},
 	mutations: {
 		setToken(state: State, token: string):void {
 			state.token = token;
+		},
+		setUsers(state: State, users: User[]):void {
+			state.users = users;
 		},
 	},
 	actions: {
@@ -29,7 +40,9 @@ const store = {
 				http.post<HTTPResponse<{ token: string }>>("/admin/login", credential)
 					.then(({ data }) => {
 						if (data.success) {
-							context.commit('setToken', data.data.token)
+							context.commit('setToken', data.data.token);
+							localStorage.setItem('pet-token', data.data.token);
+
 							resolve(data.data.token);
 						} else {
 							reject(data.error);
@@ -52,15 +65,11 @@ const store = {
 					.catch((error) => reject(error))
 			})
 		},
-		getAllUsers(): Promise<void> {
+		getAllUsers(context: Context): Promise<void> {
 			return new Promise((resolve, reject) => {
-				http.post<HTTPResponse<unknown[]>>(`/admin/user-delete/user-listing`)
+				http.get<HTTPResponse<User[]>>(`/admin/user-listing`, )
 					.then(({ data }) => {
-						if (data.success) {
-							resolve()
-						} else {
-							reject(data.error);
-						}
+						context.commit('setUsers', data.data)	
 					})
 					.catch((error) => reject(error))
 			})
@@ -81,9 +90,10 @@ const store = {
 	}
 }
 
-const { dispatch } = getStoreAccessors<State, RootState>("admin");
-const { actions } = store;
+const { dispatch, read } = getStoreAccessors<State, RootState>("admin");
+const { actions, getters } = store;
 
+export const users = read(getters.users);
 export const logIn = dispatch(actions.logIn);
 export const logOut = dispatch(actions.logOut);
 export const getAllUsers = dispatch(actions.getAllUsers);

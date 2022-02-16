@@ -6,7 +6,7 @@
 
 		<v-data-table
 			:headers="tableHeaders"
-			:items="customers"
+			:items="users"
 			:items-per-page="8"
 			class="elevation-1"
 		>
@@ -14,7 +14,7 @@
 				<div class="table-header d-flex justify-space-between align-center pl-5">
 					<h3 class="text-h7 mr-auto">All customers</h3>
 
-					<v-btn color="primary" depressed dense>
+					<v-btn color="primary" depressed dense @click="showCustomerForm = true">
 						<v-icon>mdi-plus</v-icon>
 						add new customer
 					</v-btn>
@@ -68,24 +68,24 @@
 			<template #body="{ items }">
 				<tbody>
 					<tr v-for="item in items" :key="item.name">
-						<td>{{ item.name }}</td>
+						<td>{{ item.first_name }} {{ item.last_name }}</td>
 						<td>{{ item.email }}</td>
-						<td>{{ item.phone }}</td>
+						<td>{{ item.phone_number }}</td>
 						<td>{{ item.address }}</td>
-						<td>{{ item.date }}</td>
+						<td>{{ item.created_at }}</td>
 						<td>
 							<v-chip :color="item.preference ? 'blue' : 'yello'">
 								{{ item.preference ? 'Yes' : 'No' }}
 							</v-chip>
 						</td>
 						<td class="actions">
-							<v-btn icon depressed @click="showCustomerForm = true">
+							<v-btn icon depressed @click="showCustomerForm = true" x-small>
 								<v-icon>mdi-pencil</v-icon>
 							</v-btn>
-							<v-btn icon depressed class="mx-3">
+							<v-btn icon depressed class="mx-3" x-small>
 								<v-icon>mdi-delete</v-icon>
 							</v-btn>
-							<v-btn icon depressed>
+							<v-btn icon depressed x-small>
 								<v-icon>mdi-dots-vertical</v-icon>
 							</v-btn>
 						</td>
@@ -100,6 +100,9 @@
 import { Vue, Component } from 'vue-property-decorator';
 import CustomerForm from '@/components/CustomerForm/CustomerForm.vue'
 
+import { getAllUsers, users } from '@/store/modules/admin';
+import User from '@/types/User';
+
 @Component({
 	components: {
 		CustomerForm
@@ -112,12 +115,16 @@ export default class Customers extends Vue {
 		{ text: 'Phone', value: 'phone' },
 		{ text: 'Address', value: 'address' },
 		{ text: 'Date Created', value: 'date' },
-		{ text: 'Marketing Preferences', value: 'preference' },
+		{ text: 'Marketing Preferences', value: 'is_marketing' },
 		{ text: '', value: 'action' }
 	]
 
 	private showTableOptions = false;
 	private showCustomerForm = false;
+
+	get users(): User[] {
+		return users(this.$store);
+	}
 
 	private customers = [
 		{
@@ -129,6 +136,10 @@ export default class Customers extends Vue {
 			preference: true
 		}
 	];
+
+	mounted(): void {
+		getAllUsers(this.$store)
+	}
 }
 </script>
 
@@ -156,12 +167,16 @@ tr {
 	&:hover {
 		background-color: var(--color-primary-highlight) !important;
 
-		.actions {
+		.actions * {
 			opacity: 1;
 		}
 	}
 
 	.actions {
+		width: 9%;
+	}
+
+	.actions * {
 		opacity: 0;
 		transition: .2s;
 	}
