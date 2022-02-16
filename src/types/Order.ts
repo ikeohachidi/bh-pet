@@ -6,7 +6,7 @@ export enum OrderStatus {
 	CANCELLED = 'cancelled'
 }
 
-export interface Order {
+export default interface Order {
 	uuid: string;
 	status: OrderStatus | string;
 }

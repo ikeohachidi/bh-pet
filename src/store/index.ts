@@ -7,6 +7,7 @@ import Product, { State as ProductState } from './modules/products';
 import Payment, { State as PaymentState } from './modules/payments';
 import Category, { State as CategoryState } from './modules/categories';
 import Brand, { State as BrandState } from './modules/brands';
+import Order, { State as OrderState } from './modules/orders';
 
 export type RootState = {
 	admin: AdminState,
@@ -14,7 +15,8 @@ export type RootState = {
 	products: ProductState,
 	payment: PaymentState,
 	category: CategoryState,
-	brand: BrandState
+	brand: BrandState,
+	order: OrderState
 }
 
 Vue.use(Vuex)
@@ -26,6 +28,7 @@ export default new Vuex.Store({
 		products: Product,
 		payment: Payment,
 		category: Category,
-		brands: Brand
+		brands: Brand,
+		orders: Order
 	}
 })
