@@ -1,7 +1,7 @@
 <template>
 	<section class="admin-page">
 		<div>
-			<v-navigation-drawer class="elevation-1">
+			<v-navigation-drawer class="elevation-1" v-if="showNavigation">
 				<v-list nav>
 					<v-list-item link v-for="route in adminRoutes" :key="route.text" :to="route.path">
 						<v-list-item-icon>
@@ -37,22 +37,23 @@ export default class AdminIndex extends Vue {
 		{ text: 'Shipment Locator', icon: 'map-marker', path: '/shipment' },
 		{ text: 'Customers', icon: 'account-multiple-outline', path: '/customers' },
 		{ text: 'Products', icon: 'folder-outline', path: '/products' },
-	]
+	];
+
+	get showNavigation() {
+		return this.$route.meta?.showNavigation ?? true;
+	}
 }
 </script>
 
 <style lang="scss" scoped>
 section.admin-page {
+	background-color: #FAFAFA;
 	display: grid;
 	height: 100%;
 	grid-template-columns: repeat(12, 1fr);
 
 	& > div:last-of-type {
-		grid-column: 2 / 13;
+		grid-column: 2 / 12;
 	}
-}
-
-.admin-sub-pages {
-	background-color: #FAFAFA;
 }
 </style>
