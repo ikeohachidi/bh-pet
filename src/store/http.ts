@@ -9,7 +9,7 @@ export type HTTPResponse<T> = {
 }
 
 const http = axios.create({
-	baseURL: 'https://pet-shop.buckhill.com.hr/api/v1',
+	baseURL: process.env.VUE_APP_API
 })
 
 http.interceptors.request.use((request) => {
