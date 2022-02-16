@@ -42,7 +42,7 @@ const store = {
 					.catch((error) => reject(error))
 			})
 		},
-		getOrderLocation(context: Context): Promise<void> {
+		getOrderLocation(): Promise<void> {
 			return new Promise((resolve, reject) => {
 				http.get<HTTPResponse<void>>(`/orders/shipment-locator`)
 					.then(({ data }) => {
@@ -55,7 +55,7 @@ const store = {
 					.catch((error) => reject(error))
 			})
 		},
-		getOrderDashboard(context: Context): Promise<void> {
+		getOrderDashboard(): Promise<void> {
 			return new Promise((resolve, reject) => {
 				http.get<HTTPResponse<void>>(`/orders/dashboard`)
 					.then(({ data }) => {
