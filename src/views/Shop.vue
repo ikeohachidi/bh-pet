@@ -22,7 +22,20 @@
 							</div>
 						</v-carousel-item>
 					</v-carousel>
-					<router-link to="/shop/dog-food" class="category text-h2">Dry dog food</router-link>
+
+					<div v-for="categoryProduct in categoryProducts" :key="categoryProduct.uuid" class="mt-10">
+						<router-link :to="`/shop/${categoryProduct.uuid}`" class="category-link text-h3 mb-6 text-capitalize">
+							{{ categoryProduct.title }}
+						</router-link>
+						<v-slide-group>
+							<v-slide-item v-for="product in categoryProduct.products" :key="product.uuid">
+								<div class="category-products">
+									<ProductCard :product="product"/>
+								</div>
+							</v-slide-item>
+						</v-slide-group>
+					</div>
+
 				</v-col>
 			</v-row>
 		</v-container>
@@ -32,10 +45,22 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 
-import { fetchBlogPosts, fetchPromotions, getPromotions, getPosts } from '@/store/modules/shop';
-import Promotion from '@/types/Promotion';
+import ProductCard from '@/components/ProductCard/ProductCard.vue';
 
-@Component
+import { fetchBlogPosts, fetchPromotions, getPromotions, getPosts } from '@/store/modules/shop';
+import { fetchCategories, getCategories } from '@/store/modules/categories';
+import { fetchProducts, getProductsByCategoryId } from '@/store/modules/products';
+
+import Promotion from '@/types/Promotion';
+import Category from '@/types/Category';
+import Product from '@/types/Product';
+import { getRandomNumber } from '@/helpers';
+
+@Component({
+	components: {
+		ProductCard
+	}
+})
 export default class Shop extends Vue {
 	private api = process.env.VUE_APP_API;
 
@@ -47,10 +72,37 @@ export default class Shop extends Vue {
 		return getPosts(this.$store);
 	}
 
+	get categories(): Category[] {
+		return getCategories(this.$store);
+	}
+
+	get randomCategories(): number[] {
+		const first = getRandomNumber(this.categories.length, []);
+		const second = getRandomNumber(this.categories.length, [first]);
+
+		return [first, second];
+	}
+
+	get categoryProducts() {
+		const categories = getCategories(this.$store);
+
+		const id = '022b7724-1076-3d4f-95cc-136e9c8e7d63'
+		const values: (Category & { products: Product[] })[] = [
+			{
+				...categories[0],
+				products: getProductsByCategoryId(this.$store)(id).slice(0, 5)
+			}
+		];
+
+		return values;
+	}
+
 	mounted(): void {
 		Promise.allSettled([
 			fetchBlogPosts(this.$store),
-			fetchPromotions(this.$store)
+			fetchPromotions(this.$store),
+			fetchCategories(this.$store),
+			fetchProducts(this.$store)
 		])
 	}
 }
@@ -66,6 +118,25 @@ export default class Shop extends Vue {
 		color: #fff;
 		backdrop-filter: blur(.5px);
 		display: inline-block;
+	}
+}
+
+.category-link {
+	text-decoration: none;
+	display: inline-block;
+	margin-bottom: 10px;
+}
+
+.category-products {
+	margin: 0 10px;
+	width: 288px;
+
+	&:first-of-type {
+		margin-left: 0;
+	}
+
+	&:last-of-type {
+		margin-right: 0;
 	}
 }
 </style>
