@@ -16,6 +16,7 @@ const state: State = {
 } 
 
 const store = {
+	namespaced: true,
 	state,
 	mutations: {
 		addBrand(state: State, brand: Brand): void {

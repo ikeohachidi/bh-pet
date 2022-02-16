@@ -16,6 +16,7 @@ const state: State = {
 } 
 
 const store = {
+	namespaced: true,
 	state,
 	mutations: {
 		addPayment(state: State, payment: Payment): void {

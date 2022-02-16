@@ -16,9 +16,8 @@ const state: State = {
 } 
 
 const store = {
+	namespaced: true,
 	state,
-	mutations: {
-	},
 	actions: {
 		getUser(context: Context, credential: Credential): Promise<void> {
 			return new Promise((resolve, reject) => {
