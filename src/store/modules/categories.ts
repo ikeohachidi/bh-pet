@@ -18,6 +18,11 @@ const state: State = {
 const store = {
 	namespaced: true,
 	state,
+	getters: {
+		getCategories(state: State): Category[] {
+			return state.categories;
+		}
+	},
 	mutations: {
 		addCategory(state: State, category: Category): void {
 			state.categories.push(category);
@@ -27,16 +32,12 @@ const store = {
 		},
 	},
 	actions: {
-		listCategories(context: Context, categories: Category[]): Promise<void> {
+		fetchCategories(context: Context): Promise<Category[]> {
 			return new Promise((resolve, reject) => {
-				http.get<HTTPResponse<void>>("/categories")
+				http.get<HTTPResponse<Category[]>>("/categories")
 					.then(({ data }) => {
-						if (data.success) {
-							context.commit('setCategories', categories)
-							resolve();
-						} else {
-							reject(data.error);
-						}
+						context.commit('setCategories', data.data)
+						resolve(data.data);
 					})
 					.catch((error) => reject(error))
 			})
@@ -96,13 +97,15 @@ const store = {
 	}
 }
 
-const { dispatch } = getStoreAccessors<State, RootState>("categories");
-const { actions } = store;
+const { dispatch, read } = getStoreAccessors<State, RootState>("category");
+const { actions, getters } = store;
 
+export const getCategories = read(getters.getCategories);
+
+export const fetchCategories = dispatch(actions.fetchCategories);
 export const createCategory = dispatch(actions.createCategory);
 export const deleteCategory = dispatch(actions.deleteCategory);
 export const editCategory = dispatch(actions.editCategory);
 export const getCategory = dispatch(actions.getCategory);
-export const listCategories = dispatch(actions.listCategories);
 
 export default store;
