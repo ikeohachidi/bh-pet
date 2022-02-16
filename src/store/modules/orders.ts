@@ -18,6 +18,11 @@ const state: State = {
 const store = {
 	namespaced: true,
 	state,
+	getters: {
+		orders(state: State): Order[] {
+			return state.orders;
+		}
+	},
 	mutations: {
 		addOrder(state: State, order: Order): void {
 			state.orders.push(order);
@@ -31,12 +36,8 @@ const store = {
 			return new Promise((resolve, reject) => {
 				http.get<HTTPResponse<Order[]>>("/orders")
 					.then(({ data }) => {
-						if (data.success) {
-							context.commit('setOrders', data.data)
-							resolve();
-						} else {
-							reject(data.error);
-						}
+						context.commit('setOrders', data.data)
+						resolve();
 					})
 					.catch((error) => reject(error))
 			})
@@ -135,9 +136,10 @@ const store = {
 	}
 }
 
-const { dispatch } = getStoreAccessors<State, RootState>("orders");
-const { actions } = store;
+const { dispatch, read } = getStoreAccessors<State, RootState>("orders");
+const { actions, getters } = store;
 
+export const orders = read(getters.orders);
 export const createOrder = dispatch(actions.createOrder);
 export const deleteOrder = dispatch(actions.deleteOrder);
 export const getOrderDashboard = dispatch(actions.getOrderDashboard);

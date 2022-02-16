@@ -19,12 +19,15 @@
 		<div class="mt-10">
 			<v-data-table
 				:headers="salesHeaders"
-				:items="sales"
+				:items="orders"
 				:items-per-page="5"
 				class="elevation-1"
 			>
 				<template #top>
 					<h3 class="pt-3 px-4 text-h7">Latest Sales</h3>
+				</template>
+				<template #item.orders="{ item }">
+					{{ item.products.length }}
 				</template>
 				<template #item.status="{ item }">
 					<v-chip :color="getStatusColor(item.status)">
@@ -37,8 +40,9 @@
 </template>
 
 <script lang="ts">
-import { OrderStatus } from '@/types/Order';
+import Order, { OrderStatus } from '@/types/Order';
 import { Vue, Component } from 'vue-property-decorator';
+import { getOrderDashboard, listOrders, orders } from '@/store/modules/orders';
 
 @Component
 export default class Dashboard extends Vue {
@@ -58,6 +62,10 @@ export default class Dashboard extends Vue {
 		{ text: 'Amount', value: 'amount' },
 	]
 
+	get orders(): Order[] {
+		return orders(this.$store);
+	}
+
 	private getStatusColor(status: OrderStatus): string {
 		const statusColor: Record<OrderStatus, string> = {
 			'shipped': 'green',
@@ -70,7 +78,9 @@ export default class Dashboard extends Vue {
 		return statusColor[status];
 	}
 
-	private sales = [];
+	mounted() {
+		getOrderDashboard(this.$store);
+	}
 }
 </script>
 

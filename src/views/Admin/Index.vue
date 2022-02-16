@@ -17,7 +17,7 @@
 		<div class="admin-sub-pages">
 			<v-container>
 				<v-row>
-					<v-col cols="8" class="mx-auto">
+					<v-col cols="11" class="mx-auto">
 						<router-view></router-view>
 					</v-col>
 				</v-row>
@@ -39,7 +39,7 @@ export default class AdminIndex extends Vue {
 		{ text: 'Products', icon: 'folder-outline', path: '/products' },
 	];
 
-	get showNavigation() {
+	get showNavigation(): boolean {
 		return this.$route.meta?.showNavigation ?? true;
 	}
 }
