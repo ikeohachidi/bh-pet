@@ -78,7 +78,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 
-import { Order, OrderStatus } from '@/types/Order';
+import Order, { OrderStatus } from '@/types/Order';
 
 @Component
 export default class UserSettings extends Vue {
@@ -90,7 +90,7 @@ export default class UserSettings extends Vue {
 		{ text: 'Download Invoice', value: 'invoice' },
 	];
 
-	private orders: Order[] = [
+	private orders: Pick<Order, 'uuid' | 'status'>[] = [
 		{ uuid: '490293032232', status: 'open' },
 		{ uuid: '490293032232', status: 'pending' },
 		{ uuid: '490293032232', status: 'paid' },
