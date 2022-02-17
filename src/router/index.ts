@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Shop from '../views/Shop.vue'
+import ShopIndex from '../views/Index.vue';
 import Category from '../views/Category.vue';
+import Product from '../views/Product.vue';
 import Cart from '../views/Cart.vue'
 import Checkout from '../views/Checkout.vue'
 
@@ -16,10 +18,20 @@ const routes: Array<RouteConfig> = [
 		path: '/shop',
 		name: 'Shop',
 		component: Shop,
-	},
-	{ 
-		path: '/shop/:id', 
-		component: Category 
+		children: [
+			{
+				path: '', 
+				component: ShopIndex
+			},
+			{
+				path: 'category/:id', 
+				component: Category 
+			},
+			{ 
+				path: 'product/:id', 
+				component: Product 
+			},
+		]
 	},
 	{
 		path: '/recover',
