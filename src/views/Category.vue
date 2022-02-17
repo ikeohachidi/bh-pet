@@ -47,7 +47,7 @@
 										color="error" 
 										elevation="0" 
 										@click="removeProductFromCart(product)"
-										v-if="cartItems.includes(product.uuid)"
+										v-if="isProductInCart(product.uuid)"
 									>
 										<v-icon>mdi-cart-off</v-icon>
 										remove from cart	
@@ -78,7 +78,7 @@ import ProductCard from '@/components/ProductCard/ProductCard.vue';
 
 import { getProductsByCategoryId, addProductToCart, cartItems, removeProductFromCart } from '@/store/modules/products';
 
-import Product from '@/types/Product';
+import Product, { CartItem } from '@/types/Product';
 
 @Component({
 	components: {
@@ -94,12 +94,16 @@ export default class Category extends Vue {
 		return getProductsByCategoryId(this.$store)(this.categoryId);
 	}
 
-	get cartItems(): string[] {
+	get cartItems(): CartItem[] {
 		return cartItems(this.$store);
 	}
 
+	private isProductInCart(productUUID: string): boolean {
+		return this.cartItems.findIndex(item => item.productUUID === productUUID) !== -1;
+	}
+
 	private addProductToCart(product: Product): void {
-		addProductToCart(this.$store, product.uuid);
+		addProductToCart(this.$store, { amount: 1, productUUID: product.uuid });
 	}
 
 	private removeProductFromCart(product: Product): void {

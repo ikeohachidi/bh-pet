@@ -1,7 +1,7 @@
 <template>
 	<section>
-		<div class="d-flex">
-			<div class="mr-4">
+		<div class="product">
+			<div class="product-image">
 				<img :src="`${api}/file/${product.metadata.image}`" :alt="product.title">
 			</div>
 
@@ -70,8 +70,19 @@ export default class CartItem extends Vue {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .v-btn--icon {
 	background-color:  #F4F6F5;
+}
+
+.product {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 2em;
+
+	&-image {
+		display: flex;
+		justify-content: center;
+	}
 }
 </style>

@@ -3,11 +3,11 @@ import { getStoreAccessors } from 'vuex-typescript';
 
 import http, { HTTPResponse } from '../http';
 import { RootState } from '..';
-import Product from '@/types/Product';
+import Product, { CartItem } from '@/types/Product';
 
 export type State = {
 	products: Product[];
-	cart: string[];
+	cart: CartItem[];
 }
 
 type Context = ActionContext<State, RootState>;
@@ -21,7 +21,10 @@ const store = {
 	namespaced: true,
 	state,
 	getters: {
-		cartItems(state: State): string[] {
+		getProducts(state: State): Product[] {
+			return state.products;
+		},
+		cartItems(state: State): CartItem[] {
 			return state.cart;
 		},
 		getProductsByCategoryId(state: State): (uuid: string) => Product[] {
@@ -37,11 +40,11 @@ const store = {
 		setProducts(state: State, products: Product[]): void {
 			state.products = products;
 		},
-		addProductToCart(state: State, productUUID: string): void {
-			state.cart.push(productUUID);
+		addProductToCart(state: State, item: CartItem): void {
+			state.cart.push(item);
 		},
 		removeProductFromCart(state: State, productUUID: string): void {
-			const index = state.cart.indexOf(productUUID)
+			const index = state.cart.findIndex(item => item.productUUID === productUUID);
 			if (index === -1) return;
 
 			state.cart.splice(index, 1);
@@ -58,7 +61,7 @@ const store = {
 					.catch((error) => reject(error))
 			})
 		},
-		getProduct(context: Context, uuid: string): Promise<void> {
+		fetchProductData(context: Context, uuid: string): Promise<void> {
 			return new Promise((resolve, reject) => {
 				http.get<HTTPResponse<void>>(`/product/${uuid}`)
 					.then(({ data }) => {
@@ -116,6 +119,7 @@ const store = {
 const { dispatch, read, commit } = getStoreAccessors<State, RootState>("products");
 const { actions, getters, mutations } = store;
 
+export const getProducts = read(getters.getProducts);
 export const getProductsByCategoryId = read(getters.getProductsByCategoryId);
 export const cartItems = read(getters.cartItems);
 
@@ -125,7 +129,7 @@ export const removeProductFromCart = commit(mutations.removeProductFromCart);
 export const createProduct = dispatch(actions.createProduct);
 export const deleteProduct = dispatch(actions.deleteProduct);
 export const editProduct = dispatch(actions.editProduct);
-export const getProduct = dispatch(actions.getProduct);
+export const fetchProductData = dispatch(actions.fetchProductData);
 export const fetchProducts = dispatch(actions.fetchProducts);
 
 export default store;
