@@ -15,3 +15,8 @@ export default interface Product {
 	deleted_at: string;
 	category: Category;
 }
+
+export interface CartItem {
+	productUUID: string;
+	amount: number;
+}
