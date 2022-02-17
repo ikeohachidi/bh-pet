@@ -8,10 +8,9 @@
 						outlined
 					></v-text-field>
 				</v-col>
-				<v-col cols="12"></v-col>
-				<router-view></router-view>
 			</v-row>
 		</v-container>
+		<router-view></router-view>
 	</section>
 </template>
 
