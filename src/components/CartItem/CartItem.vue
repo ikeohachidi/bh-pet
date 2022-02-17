@@ -12,11 +12,11 @@
 
 				<div class="d-flex">
 					<div class="d-flex mr-4" style="width: 140px">
-						<v-btn icon tile elevation="0">
+						<v-btn icon tile elevation="0" @click="amount--">
 							<v-icon>mdi-minus</v-icon>
 						</v-btn>
-						<v-text-field width="20px" dense outlined class="mx-3"></v-text-field>
-						<v-btn icon tile elevation="0">
+						<v-text-field width="20px" :value="amount" disabled dense outlined class="mx-3"></v-text-field>
+						<v-btn icon tile elevation="0" @click="amount++">
 							<v-icon>mdi-plus</v-icon>
 						</v-btn>
 					</div>
@@ -24,7 +24,7 @@
 						color="error" 
 						elevation="0" 
 						@click="removeProductFromCart(product)"
-						v-if="isProductInCart"
+						v-if="itemInCart"
 					>
 						<v-icon>mdi-cart-off</v-icon>
 						remove from cart	
@@ -47,8 +47,14 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 
-import Product from '@/types/Product';
-import { cartItems } from '@/store/modules/products';
+import Product, { CartItem as CartItemType } from '@/types/Product';
+
+import { 
+	cartItems, 
+	setItemAmount,
+	addProductToCart,
+	removeProductFromCart
+} from '@/store/modules/products';
 
 @Component
 export default class CartItem extends Vue {
@@ -56,16 +62,41 @@ export default class CartItem extends Vue {
 
 	private api = process.env.VUE_APP_API;
 
-	get cartItems() {
+	private itemAmount = 0;
+	get amount() {
+		if (this.itemInCart) {
+			return this.itemInCart.amount;
+		}
+		return this.itemAmount;
+	}
+
+	set amount(value: number) {
+		if (this.itemInCart) {
+			setItemAmount(this.$store, { productUUID: this.product.uuid, amount: value })
+			this.itemAmount = value;
+
+			return
+		}
+		this.itemAmount = value;
+	}
+
+	private addProductToCart() {
+		addProductToCart(this.$store, {
+			productUUID: this.product.uuid,
+			amount: this.itemAmount || 1
+		});
+	}
+
+	private removeProductFromCart(): void {
+		removeProductFromCart(this.$store, this.product.uuid);
+	}
+
+	get cartItems(): CartItemType[] {
 		return cartItems(this.$store)
 	}
 
-	get itemInCart() {
+	get itemInCart(): CartItemType | undefined {
 		return this.cartItems.find(item => item.productUUID === this.product.uuid);
-	}
-
-	get isProductInCart(): boolean {
-		return this.itemInCart !== undefined;
 	}
 }
 </script>

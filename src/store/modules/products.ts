@@ -49,6 +49,11 @@ const store = {
 
 			state.cart.splice(index, 1);
 		},
+		setItemAmount(state: State, item: CartItem): void {
+			const index = state.cart.findIndex(item => item.productUUID === item.productUUID);
+			if (index === -1) return;
+			state.cart[index].amount = item.amount;
+		}
 	},
 	actions: {
 		fetchProducts(context: Context): Promise<Product[]> {
@@ -125,6 +130,7 @@ export const cartItems = read(getters.cartItems);
 
 export const addProductToCart = commit(mutations.addProductToCart);
 export const removeProductFromCart = commit(mutations.removeProductFromCart);
+export const setItemAmount = commit(mutations.setItemAmount);
 
 export const createProduct = dispatch(actions.createProduct);
 export const deleteProduct = dispatch(actions.deleteProduct);
