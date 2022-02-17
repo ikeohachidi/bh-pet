@@ -36,6 +36,7 @@
 import { Vue, Component } from 'vue-property-decorator';
 
 import { cartItems } from '@/store/modules/products';
+import { CartItem } from '@/types/Product';
 
 @Component
 export default class Navbar extends Vue {
@@ -43,7 +44,7 @@ export default class Navbar extends Vue {
 		this.$router.push({ name: 'cart' });
 	}
 
-	get cartItems(): string[] {
+	get cartItems(): CartItem[] {
 		return cartItems(this.$store)
 	}
 
