@@ -7,23 +7,28 @@ import Product from '@/types/Product';
 
 export type State = {
 	products: Product[];
+	cart: string[];
 }
 
 type Context = ActionContext<State, RootState>;
 
 const state: State = {
-	products: []
+	products: [],
+	cart: []
 } 
 
 const store = {
 	namespaced: true,
 	state,
 	getters: {
+		cartItems(state: State): string[] {
+			return state.cart;
+		},
 		getProductsByCategoryId(state: State): (uuid: string) => Product[] {
 			return (uuid: string) => {
 				return state.products.filter(product => product.category_uuid === uuid);
 			}
-		}
+		},
 	},
 	mutations: {
 		addProduct(state: State, product: Product): void {
@@ -31,6 +36,15 @@ const store = {
 		},
 		setProducts(state: State, products: Product[]): void {
 			state.products = products;
+		},
+		addProductToCart(state: State, productUUID: string): void {
+			state.cart.push(productUUID);
+		},
+		removeProductFromCart(state: State, productUUID: string): void {
+			const index = state.cart.indexOf(productUUID)
+			if (index === -1) return;
+
+			state.cart.splice(index, 1);
 		},
 	},
 	actions: {
@@ -99,10 +113,15 @@ const store = {
 	}
 }
 
-const { dispatch, read } = getStoreAccessors<State, RootState>("products");
-const { actions, getters } = store;
+const { dispatch, read, commit } = getStoreAccessors<State, RootState>("products");
+const { actions, getters, mutations } = store;
 
 export const getProductsByCategoryId = read(getters.getProductsByCategoryId);
+export const cartItems = read(getters.cartItems);
+
+export const addProductToCart = commit(mutations.addProductToCart);
+export const removeProductFromCart = commit(mutations.removeProductFromCart);
+
 export const createProduct = dispatch(actions.createProduct);
 export const deleteProduct = dispatch(actions.deleteProduct);
 export const editProduct = dispatch(actions.editProduct);

@@ -23,7 +23,7 @@
 		<v-btn class="mr-2" outlined large @click="goToCartPage">
 			<v-icon>mdi-cart</v-icon>
 			Cart
-			(0)
+			({{ cartItems.length }})
 		</v-btn>
 		<v-btn class="mr-2" outlined large @click="showLogin">Login</v-btn>
 		<v-avatar color="info" size="35" @click="showUserSettings" class="pointer">
@@ -35,10 +35,16 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 
+import { cartItems } from '@/store/modules/products';
+
 @Component
 export default class Navbar extends Vue {
 	private goToCartPage() {
 		this.$router.push({ name: 'cart' });
+	}
+
+	get cartItems(): string[] {
+		return cartItems(this.$store)
 	}
 
 	private showLogin() {

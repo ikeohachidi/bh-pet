@@ -40,15 +40,30 @@
 
 				<v-col cols="6" offset="1">
 					<div class="products">
-						<v-card class="pa-5" v-for="count in 6" :key="count">
-							<h4>Brit Care endurance</h4>
-							<p>Animoda</p>
-							<p>200 kn</p>
-							<v-btn class="mt-2" color="primary" elevation="0">
-								<v-icon>mdi-cart</v-icon>
-								add to cart
-							</v-btn>
-						</v-card>
+						<ProductCard v-for="product in products" :product="product" :key="product.uuid">
+							<template #bottom>
+								<div class="mt-2">
+									<v-btn 
+										color="error" 
+										elevation="0" 
+										@click="removeProductFromCart(product)"
+										v-if="cartItems.includes(product.uuid)"
+									>
+										<v-icon>mdi-cart-off</v-icon>
+										remove from cart	
+									</v-btn>
+									<v-btn 
+										color="primary" 
+										elevation="0" 
+										@click="addProductToCart(product)"
+										v-else
+									>
+										<v-icon>mdi-cart</v-icon>
+										add to cart
+									</v-btn>
+								</div>
+							</template>
+						</ProductCard>
 					</div>
 				</v-col>
 			</v-row>
@@ -59,8 +74,38 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 
-@Component
-export default class Category extends Vue {}
+import ProductCard from '@/components/ProductCard/ProductCard.vue';
+
+import { getProductsByCategoryId, addProductToCart, cartItems, removeProductFromCart } from '@/store/modules/products';
+
+import Product from '@/types/Product';
+
+@Component({
+	components: {
+		ProductCard
+	}
+})
+export default class Category extends Vue {
+	get categoryId(): string {
+		return this.$route.params['id']
+	}
+
+	get products(): Product[] {
+		return getProductsByCategoryId(this.$store)(this.categoryId);
+	}
+
+	get cartItems(): string[] {
+		return cartItems(this.$store);
+	}
+
+	private addProductToCart(product: Product): void {
+		addProductToCart(this.$store, product.uuid);
+	}
+
+	private removeProductFromCart(product: Product): void {
+		removeProductFromCart(this.$store, product.uuid);
+	}
+}
 </script>
 
 <style lang="scss" scoped>
