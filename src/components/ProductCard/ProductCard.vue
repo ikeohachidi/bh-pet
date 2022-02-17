@@ -1,5 +1,5 @@
 <template>
-	<v-card class="pa-5" elevation="2">
+	<v-card class="pa-5">
 		<div class="product">
 			<div class="product-img-wrapper">
 				<img :src="`${api}/file/${product.metadata.image}`" :alt="product.title">
@@ -8,6 +8,7 @@
 			<p class="text-capitalize">{{ product.brand.title }}</p>
 
 			<h6 class="text-h6">{{ product.price }} Kn</h6>
+			<slot name="bottom"></slot>
 		</div>
 	</v-card>
 </template>
@@ -28,6 +29,7 @@ export default class ProductCard extends Vue {
 .product {
 	h6 {
 		white-space: nowrap;
+		width: 200px;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
