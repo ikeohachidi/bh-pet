@@ -4,7 +4,7 @@
 			<div class="product-img-wrapper">
 				<img :src="`${api}/file/${product.metadata.image}`" :alt="product.title">
 			</div>
-			<h6 class="text-h6" :title="product.title">{{ product.title }}</h6>
+			<h6 class="text-h6" :title="product.title" @click="viewProduct">{{ product.title }}</h6>
 			<p class="text-capitalize">{{ product.brand.title }}</p>
 
 			<h6 class="text-h6">{{ product.price }} Kn</h6>
@@ -22,6 +22,10 @@ export default class ProductCard extends Vue {
 	@Prop({ default: () => ({})}) product!: Product;
 	
 	private api = process.env.VUE_APP_API;
+
+	private viewProduct() {
+		this.$router.push({ path: `/shop/product/${this.product.uuid}` })
+	}
 }
 </script>
 
