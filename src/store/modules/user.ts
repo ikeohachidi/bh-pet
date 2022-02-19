@@ -32,10 +32,14 @@ const store = {
 							context.commit('setUser', data.data)
 							resolve();
 						} else {
+							localStorage.removeItem(TOKEN)
 							reject(data.error);
 						}
 					})
-					.catch((error) => reject(error))
+					.catch((error) => {
+						localStorage.removeItem(TOKEN)
+						reject(error)
+					})
 			})
 		},
 		deleteUser(context: Context, credential: Credential): Promise<void> {
