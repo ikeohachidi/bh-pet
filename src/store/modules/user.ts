@@ -83,6 +83,7 @@ const store = {
 					.then(({ data }) => {
 						if (data.success) {
 							localStorage.setItem(TOKEN, data.data.token);
+							context.dispatch('fetchUserData')
 							resolve();
 						} else {
 							reject(data.error);
