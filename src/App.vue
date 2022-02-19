@@ -22,6 +22,8 @@ import Signup from '@/components/Signup/Signup.vue';
 import Footer from '@/components/Footer/Footer.vue';
 import UserSettings from '@/components/UserSettings/UserSettings.vue';
 
+import { fetchUserData } from '@/store/modules/user';
+
 @Component({
 	components: {
 		Navbar,
@@ -45,6 +47,10 @@ export default class App extends Vue {
 	private displayLogin() {
 		this.showSignup = false;
 		this.showLogin = true;
+	}
+
+	mounted() {
+		fetchUserData(this.$store)
 	}
 }
 </script>
