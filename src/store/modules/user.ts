@@ -18,6 +18,14 @@ const state: State = {
 const store = {
 	namespaced: true,
 	state,
+	getters: {
+		getUserData(state: State): User {
+			return state.user;
+		},
+		isUserAuthenticated(state: State): boolean {
+			return state.user.uuid !== '';
+		}
+	},
 	mutations: {
 		setUser(state: State, user: User): void {
 			state.user = user;
@@ -156,8 +164,11 @@ const store = {
 	}
 }
 
-const { dispatch } = getStoreAccessors<State, RootState>("user");
-const { actions } = store;
+const { dispatch, read } = getStoreAccessors<State, RootState>("user");
+const { actions, getters } = store;
+
+export const getUserData = read(getters.getUserData);
+export const isUserAuthenticated = read(getters.isUserAuthenticated);
 
 export const fetchUserData = dispatch(actions.fetchUserData);
 export const createUser = dispatch(actions.createUser);
