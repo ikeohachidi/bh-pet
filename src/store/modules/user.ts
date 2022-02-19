@@ -1,29 +1,35 @@
 import { ActionContext } from 'vuex';
 import { getStoreAccessors } from 'vuex-typescript';
 
-import http, { HTTPResponse } from '../http';
+import http, { HTTPResponse, TOKEN } from '../http';
 import { RootState } from '..';
-import Credential from '@/models/Credential';
+import User, { Credential } from '@/types/User';
 
 export type State = {
-	users: unknown[];
+	user: User;
 }
 
 type Context = ActionContext<State, RootState>;
 
 const state: State = {
-	users: []
+	user: new User 
 } 
 
 const store = {
 	namespaced: true,
 	state,
+	mutations: {
+		setUser(state: State, user: User): void {
+			state.user = user;
+		}
+	},
 	actions: {
-		getUser(context: Context, credential: Credential): Promise<void> {
+		fetchUserData(context: Context): Promise<void> {
 			return new Promise((resolve, reject) => {
 				http.get<HTTPResponse<void>>("/user")
 					.then(({ data }) => {
 						if (data.success) {
+							context.commit('setUser', data.data)
 							resolve();
 						} else {
 							reject(data.error);
@@ -73,9 +79,10 @@ const store = {
 		},
 		login(context: Context, credential: Credential): Promise<void> {
 			return new Promise((resolve, reject) => {
-				http.post<HTTPResponse<void>>("/user/login", credential)
+				http.post<HTTPResponse<{ token: string }>>("/user/login", credential)
 					.then(({ data }) => {
 						if (data.success) {
+							localStorage.setItem(TOKEN, data.data.token);
 							resolve();
 						} else {
 							reject(data.error);
@@ -89,6 +96,7 @@ const store = {
 				http.get<HTTPResponse<void>>("/user/logout")
 					.then(({ data }) => {
 						if (data.success) {
+							localStorage.removeItem(TOKEN)
 							resolve();
 						} else {
 							reject(data.error);
@@ -97,9 +105,9 @@ const store = {
 					.catch((error) => reject(error))
 			})
 		},
-		createUser(context: Context): Promise<void> {
+		createUser(context: Context, user: User): Promise<void> {
 			return new Promise((resolve, reject) => {
-				http.post<HTTPResponse<void>>("/user/create")
+				http.post<HTTPResponse<void>>("/user/create", user)
 					.then(({ data }) => {
 						if (data.success) {
 							resolve();
@@ -142,7 +150,7 @@ const store = {
 const { dispatch } = getStoreAccessors<State, RootState>("user");
 const { actions } = store;
 
-export const getUser = dispatch(actions.getUser);
+export const fetchUserData = dispatch(actions.fetchUserData);
 export const createUser = dispatch(actions.createUser);
 export const editUser = dispatch(actions.editUser);
 export const deleteUser = dispatch(actions.deleteUser);

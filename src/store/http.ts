@@ -8,12 +8,14 @@ export type HTTPResponse<T> = {
 	extra: string
 }
 
+const TOKEN = 'pet-token';
+
 const http = axios.create({
 	baseURL: process.env.VUE_APP_API
 })
 
 http.interceptors.request.use((request) => {
-	const token = localStorage.getItem('pet-token');
+	const token = localStorage.getItem(TOKEN);
 
 	if (request.headers && token) {
 		request.headers['Authorization'] = `Bearer ${token}`;
@@ -21,5 +23,9 @@ http.interceptors.request.use((request) => {
 
 	return request;
 })
+
+export {
+	TOKEN
+}
 
 export default http;
