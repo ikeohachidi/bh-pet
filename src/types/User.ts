@@ -16,3 +16,7 @@ export default class User {
 		return `${this.first_name} ${this.last_name}`;
 	}
 }
+export class Credential {
+	email = '';
+	password = '';
+}

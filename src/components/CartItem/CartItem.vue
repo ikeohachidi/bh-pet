@@ -63,7 +63,7 @@ export default class CartItem extends Vue {
 	private api = process.env.VUE_APP_API;
 
 	private itemAmount = 0;
-	get amount() {
+	get amount(): number {
 		if (this.itemInCart) {
 			return this.itemInCart.amount;
 		}
