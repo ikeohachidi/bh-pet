@@ -19,16 +19,24 @@
 			<v-btn plain>BLOG</v-btn>
 		</div>
 		<v-spacer></v-spacer>
-	
+
 		<v-btn class="mr-2" outlined large @click="goToCartPage">
 			<v-icon>mdi-cart</v-icon>
 			Cart
 			({{ cartItems.length }})
 		</v-btn>
-		<v-btn class="mr-2" outlined large @click="showLogin">Login</v-btn>
-		<v-avatar color="info" size="35" @click="showUserSettings" class="pointer">
-			<span>CI</span>
-		</v-avatar>
+	
+		<template v-if="isUserAuthenticated">
+			<v-btn class="mr-2" outlined large @click="logOut">
+				logout
+			</v-btn>
+			<v-avatar color="info" size="35" @click="showUserSettings" class="pointer">
+				<span>CI</span>
+			</v-avatar>
+		</template>
+		<template v-else>
+			<v-btn class="mr-2" outlined large @click="showLogin">Login</v-btn>
+		</template>
 	</v-app-bar>
 </template>
 
@@ -36,12 +44,19 @@
 import { Vue, Component } from 'vue-property-decorator';
 
 import { cartItems } from '@/store/modules/products';
+import { isUserAuthenticated } from '@/store/modules/user';
+
 import { CartItem } from '@/types/Product';
+import { logOut } from '@/store/modules/user';
 
 @Component
 export default class Navbar extends Vue {
 	private goToCartPage() {
 		this.$router.push({ name: 'cart' });
+	}
+
+	get isUserAuthenticated(): boolean {
+		return isUserAuthenticated(this.$store);
 	}
 
 	get cartItems(): CartItem[] {
@@ -54,6 +69,10 @@ export default class Navbar extends Vue {
 
 	private showUserSettings() {
 		this.$emit('show-user-settings');
+	}
+
+	private logOut() {
+		logOut(this.$store)
 	}
 }
 </script>
