@@ -21,6 +21,9 @@ const store = {
 	mutations: {
 		setUser(state: State, user: User): void {
 			state.user = user;
+		},
+		clearUser(state: State): void {
+			state.user = new User();
 		}
 	},
 	actions: {
@@ -101,7 +104,8 @@ const store = {
 				http.get<HTTPResponse<void>>("/user/logout")
 					.then(({ data }) => {
 						if (data.success) {
-							localStorage.removeItem(TOKEN)
+							localStorage.removeItem(TOKEN);
+							context.commit('clearUser');
 							resolve();
 						} else {
 							reject(data.error);
