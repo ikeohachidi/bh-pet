@@ -2,7 +2,14 @@
 	<section>
 		<v-dialog v-model="show" @click:outside="close">
 			<v-card class="mx-auto pa-10" width="1200">
-				<div></div>
+				<div>
+					<v-avatar
+						:src="`${api}/file/${user.avatar}`"
+						size="100"
+					>
+						<span>{{ user.first_name[0] }} {{ user.last_name[0] }}</span>
+					</v-avatar>
+				</div>
 
 				<h2 class="font-weight-regular text-center mb-10">User Settings</h2>
 
@@ -17,31 +24,31 @@
 							<v-col>
 								<div>
 									<small>Name</small>
-									<p>John Rollingston</p>
+									<p>{{ user.first_name }} {{ user.last_name }}</p>
 								</div>
 								<div>
 									<small>Date Joined</small>
-									<p>14.9.2020</p>
+									<p>{{ formatDate(user.created_at) }}</p>
 								</div>
 							</v-col>
 							<v-col>
 								<div>
 									<small>Phone Number</small>
-									<p>(559) 979-6096</p>
+									<p>{{ user.phone_number }}</p>
 								</div>
 								<div>
 									<small>Email</small>
-									<p>j.sharp@thamail.com</p>
+									<p>{{ user.email }}</p>
 								</div>
 							</v-col>
 							<v-col>
 								<div>
 									<small>Address</small>
-									<p>1285 Fallen Pioneer Heights, Dallas, TX</p>
+									<p>{{ user.address }}</p>
 								</div>
 								<div>
 									<small>Marketing preferences</small>
-									<p>No</p>
+									<p>{{ user.is_marketing }}</p>
 								</div>
 							</v-col>
 						</v-row>
@@ -79,10 +86,25 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 
 import Order, { OrderStatus } from '@/types/Order';
+import User from '@/types/User';
+
+import { getUserData } from '@/store/modules/user';
+
+import { formatTextToDate } from '@/helpers'
 
 @Component
 export default class UserSettings extends Vue {
 	@Prop({ default: false }) show!: boolean;
+
+	private api = process.env.VUE_APP_API;
+
+	get user(): User {
+		return getUserData(this.$store)
+	}
+
+	private formatDate(string: string): string {
+		return formatTextToDate(string);
+	}
 
 	private orderHeaders = [
 		{ text: 'Order UUID', value: 'uuid' },

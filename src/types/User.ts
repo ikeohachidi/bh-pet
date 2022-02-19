@@ -1,4 +1,5 @@
 export default class User {
+	uuid = '';
 	address = '';
 	avatar = '';
 	created_at = '';
