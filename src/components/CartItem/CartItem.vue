@@ -2,7 +2,11 @@
 	<section>
 		<div class="product">
 			<div class="product-image">
-				<img :src="`${api}/file/${product.metadata.image}`" :alt="product.title">
+				<img 
+					:src="`${api}/file/${product.metadata.image}`" 
+					:alt="product.title"
+					:style="{ height: `${imageSize}px` }"
+				>
 			</div>
 
 			<div>
@@ -60,6 +64,7 @@ import {
 export default class CartItem extends Vue {
 	@Prop({ default: () => ({}) }) product!: Product;
 	@Prop({ default: true }) canAddToCart!: boolean;
+	@Prop({ default: 200 }) imageSize!: number;
 
 	private api = process.env.VUE_APP_API;
 
@@ -109,11 +114,12 @@ export default class CartItem extends Vue {
 
 .product {
 	display: grid;
-	grid-template-columns: repeat(2, 1fr);
+	grid-template-columns: 30% 70%;
 	gap: 2em;
 
 	&-image {
 		display: flex;
+		align-items: center;
 		justify-content: center;
 	}
 }
