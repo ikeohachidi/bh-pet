@@ -52,7 +52,7 @@ import { logOut } from '@/store/modules/user';
 @Component
 export default class Navbar extends Vue {
 	private goToCartPage() {
-		this.$router.push({ name: 'cart' });
+		this.$router.push({ path: '/cart' });
 	}
 
 	get isUserAuthenticated(): boolean {
