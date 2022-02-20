@@ -28,7 +28,7 @@ export default new Vuex.Store({
 		admin: Admin,
 		user: User,
 		products: Product,
-		payment: Payment,
+		payments: Payment,
 		category: Category,
 		brands: Brand,
 		orders: Order,

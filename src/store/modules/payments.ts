@@ -82,7 +82,7 @@ const store = {
 		},
 		createPayment(context: Context, payment: Payment): Promise<void> {
 			return new Promise((resolve, reject) => {
-				http.post<HTTPResponse<void>>(`/products/create`, payment)
+				http.post<HTTPResponse<void>>(`/payment/create`, payment)
 					.then(({ data }) => {
 						if (data.success) {
 							resolve();
