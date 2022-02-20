@@ -30,8 +30,8 @@
 
 							<v-list-item>
 								<div class="d-flex flex-column w-100">
-									<v-slider></v-slider>
-									<v-btn right outlined>5000 KN</v-btn>
+									<v-slider :max="mostExpensiveProduct" v-model="priceRange"></v-slider>
+									<v-btn right outlined>{{ priceRange }} KN</v-btn>
 								</div>
 							</v-list-item>
 						</v-list-group>
@@ -50,7 +50,7 @@
 
 				<v-col cols="6" offset="1">
 					<div class="products">
-						<ProductCard v-for="product in products" :product="product" :key="product.uuid">
+						<ProductCard v-for="product in sortedProducts" :product="product" :key="product.uuid">
 							<template #bottom>
 								<div class="mt-2">
 									<v-btn 
@@ -101,7 +101,9 @@ export default class Category extends Vue {
 	private sortOptions = [
 		{ text: 'Highest Price First', value: 'desc', },
 		{ text: 'Lowest Price First', value: 'asc', }
-	]
+	];
+
+	private priceRange = 5000;
 
 	get categoryId(): string {
 		return this.$route.params['id']
@@ -109,11 +111,20 @@ export default class Category extends Vue {
 
 	get products(): Product[] {
 		return getProductsByCategoryId(this.$store)(this.categoryId)
+	}
+
+	get sortedProducts(): Product[] {
+		return this.products
+			.filter(product => product.price <= this.priceRange)
 			.sort((a, b) => {
 				if (this.selectedSortOption === 'desc') return b.price - a.price;
 				return a.price - b.price
 			})
 	}
+
+	get mostExpensiveProduct(): number {
+		return Math.max(...this.products.map(product => product.price)) || 5000;
+	} 
 
 	get cartItems(): CartItem[] {
 		return cartItems(this.$store);
