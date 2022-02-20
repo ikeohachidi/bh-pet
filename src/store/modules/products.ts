@@ -27,6 +27,16 @@ const store = {
 		cartItems(state: State): CartItem[] {
 			return state.cart;
 		},
+		getProductsInCart(state: State): Product[] {
+			const products: Product[] = [];
+
+			state.cart.forEach(item => {
+				const product = state.products.find(product => product.uuid === item.productUUID);
+				if (product) products.push(product);
+			})
+
+			return products;
+		},
 		getProductsByCategoryId(state: State): (uuid: string) => Product[] {
 			return (uuid: string) => {
 				return state.products.filter(product => product.category_uuid === uuid);
@@ -127,6 +137,7 @@ const { actions, getters, mutations } = store;
 export const getProducts = read(getters.getProducts);
 export const getProductsByCategoryId = read(getters.getProductsByCategoryId);
 export const cartItems = read(getters.cartItems);
+export const getProductsInCart = read(getters.getProductsInCart)
 
 export const addProductToCart = commit(mutations.addProductToCart);
 export const removeProductFromCart = commit(mutations.removeProductFromCart);
