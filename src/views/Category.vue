@@ -31,7 +31,7 @@
 							<v-list-item>
 								<div class="d-flex flex-column w-100">
 									<v-slider :max="mostExpensiveProduct" v-model="priceRange"></v-slider>
-									<v-btn right outlined>{{ priceRange }} KN</v-btn>
+									<v-btn class="ml-auto" max-width="800px" right outlined>{{ priceRange }} KN</v-btn>
 								</div>
 							</v-list-item>
 						</v-list-group>
