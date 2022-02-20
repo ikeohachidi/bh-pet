@@ -14,7 +14,7 @@
 		<div class="methods mb-10">
 			<div 
 				v-for="{ text, icon, value } in methods" :key="icon" 
-				@click="selectedMethod = value" 
+				@click="updateSelectedMethod(value)" 
 				class="elevation-1 d-flex flex-column align-center pa-5 rounded pointer"
 				:class="{ 'active': selectedMethod === value }"
 			>
@@ -56,7 +56,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 
 import UserInfoForm from '@/components/UserInfoForm/UserInfoForm.vue';
 
@@ -72,12 +72,15 @@ export default class PaymentMethod extends Vue {
 	@Prop({ default: () => (new CashPayment) }) cash!: CashPayment;
 	@Prop({ default: () => (new BankPayment) }) bank!: BankPayment;
 	@Prop({ default: () => (new ShippingDetails) }) paymentDetails!: ShippingDetails;
+	@Prop({ default: PaymentType.CARD }) selectedMethod!: PaymentType;
 	@Prop({ default: false }) useShippingDetails!: boolean;
-
-	private selectedMethod = PaymentType.CARD;
 
 	onShippingDetailsChange(value: boolean) {
 		this.$emit('update:useShippingDetails', value);
+	}
+
+	updateSelectedMethod(value: PaymentType): void {
+		this.$emit('update:selectedMethod', value)
 	}
 
 	get paymentType(): typeof PaymentType {

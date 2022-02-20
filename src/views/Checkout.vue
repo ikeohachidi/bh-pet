@@ -49,6 +49,7 @@
 						:card="card"
 						:bank="bank"
 						:cash="cash"
+						:selectedMethod.sync="selectedPaymentMethod"
 						:paymentDetails="useAsPaymentDetails ? shippingDetails : paymentDetails"
 						:useShippingDetails.sync="useAsPaymentDetails"
 					/>
@@ -65,7 +66,7 @@
 							<v-btn color="primary" class="px-4" @click="goToStep(activeStep + 1)">next</v-btn>
 						</template>
 
-						<v-btn v-else width="100%" depressed color="primary">place order</v-btn>
+						<v-btn v-else width="100%" depressed color="primary" @click="placeOrder">place order</v-btn>
 					</div>
 				</v-col>
 			</v-row>
@@ -80,7 +81,8 @@ import PaymentMethod from '@/components/PaymentMethod/PaymentMethod.vue';
 import OrderSummary from '@/components/OrderSummary/OrderSummary.vue';
 import UserInfoForm from '@/components/UserInfoForm/UserInfoForm.vue';
 
-import { PaymentType, CardPayment, BankPayment, CashPayment, ShippingDetails} from '@/types/Payment';
+import Payment, { PaymentType, CardPayment, BankPayment, CashPayment, ShippingDetails} from '@/types/Payment';
+import { createPayment } from '@/store/modules/payments';
 
 @Component({
 	components: {
@@ -92,13 +94,13 @@ import { PaymentType, CardPayment, BankPayment, CashPayment, ShippingDetails} fr
 export default class Checkout extends Vue {
 	private activeStep = 1;
 
+	private selectedPaymentMethod: PaymentType = PaymentType.CARD;
 	private shippingDetails: ShippingDetails = new ShippingDetails;
 	private paymentDetails: ShippingDetails = new ShippingDetails;
 
 	private card = new CardPayment;
 	private cash = new CashPayment;
 	private bank = new BankPayment;
-
 	private useAsPaymentDetails = false;
 
 	private goToStep(step: number) {

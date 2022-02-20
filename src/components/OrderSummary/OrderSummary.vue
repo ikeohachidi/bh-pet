@@ -34,9 +34,6 @@
 				<h3>Your Order</h3>
 				<p @click="goToCartPage">Edit</p>
 			</div>
-		</div>
-
-		<div>
 			<CartItem 
 				v-for="product in productsInCart" 
 				:key="product.uuid" 
