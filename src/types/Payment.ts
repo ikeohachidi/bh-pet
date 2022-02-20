@@ -4,8 +4,9 @@ export enum PaymentType {
 	BANK = "bank_transfer"
 }
 export default interface Payment {
-	uuid: string;
+	uuid?: string;
 	type: PaymentType;
+	details?: PaymentConfig;
 }
 
 export class CardPayment {
@@ -26,6 +27,8 @@ export class BankPayment {
 	name = '';
 	swift = '';
 }
+
+export type PaymentConfig = CardPayment | CashPayment | BankPayment;
 
 export class ShippingDetails {
 	first_name = '';
