@@ -2,14 +2,6 @@
 	<section>
 		<v-dialog v-model="show" @click:outside="close">
 			<v-card class="mx-auto pa-10" width="1200">
-				<div>
-					<v-avatar
-						:src="`${api}/file/${user.avatar}`"
-						size="100"
-					>
-						<span>{{ user.first_name[0] }} {{ user.last_name[0] }}</span>
-					</v-avatar>
-				</div>
 
 				<h2 class="font-weight-regular text-center mb-10">User Settings</h2>
 
@@ -18,7 +10,12 @@
 						<v-row>
 							<v-col>
 								<div class="d-flex justify-center">
-									<v-avatar color="info" size="118"></v-avatar>
+									<v-avatar 
+										:src="`${api}/file/${user.avatar}`"
+										color="info" 
+										:alt="`${user.first_name[0] } ${ user.last_name[0] }`"
+										size="118"
+									></v-avatar>
 								</div>
 							</v-col>
 							<v-col>
