@@ -42,7 +42,7 @@
 <script lang="ts">
 import Order, { OrderStatus } from '@/types/Order';
 import { Vue, Component } from 'vue-property-decorator';
-import { getOrderDashboard, listOrders, orders } from '@/store/modules/orders';
+import { getOrderDashboard, getOrders } from '@/store/modules/orders';
 
 @Component
 export default class Dashboard extends Vue {
@@ -63,7 +63,7 @@ export default class Dashboard extends Vue {
 	]
 
 	get orders(): Order[] {
-		return orders(this.$store);
+		return getOrders(this.$store);
 	}
 
 	private getStatusColor(status: OrderStatus): string {
@@ -78,7 +78,7 @@ export default class Dashboard extends Vue {
 		return statusColor[status];
 	}
 
-	mounted() {
+	mounted(): void {
 		getOrderDashboard(this.$store);
 	}
 }
