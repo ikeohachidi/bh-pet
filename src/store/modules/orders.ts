@@ -19,7 +19,7 @@ const store = {
 	namespaced: true,
 	state,
 	getters: {
-		orders(state: State): Order[] {
+		getOrders(state: State): Order[] {
 			return state.orders;
 		}
 	},
@@ -32,9 +32,19 @@ const store = {
 		},
 	},
 	actions: {
-		listOrders(context: Context): Promise<void> {
+		fetchOrders(context: Context): Promise<void> {
 			return new Promise((resolve, reject) => {
 				http.get<HTTPResponse<Order[]>>("/orders")
+					.then(({ data }) => {
+						context.commit('setOrders', data.data)
+						resolve();
+					})
+					.catch((error) => reject(error))
+			})
+		},
+		fetchUserOrders(context: Context): Promise<void> {
+			return new Promise((resolve, reject) => {
+				http.get<HTTPResponse<Order[]>>("/user/orders")
 					.then(({ data }) => {
 						context.commit('setOrders', data.data)
 						resolve();
@@ -120,15 +130,14 @@ const store = {
 					.catch((error) => reject(error))
 			})
 		},
-		downloadOrder(context: Context, order: Order): Promise<void> {
+		downloadOrderInvoice(context: Context, order: Order): Promise<void> {
 			return new Promise((resolve, reject) => {
-				http.get<HTTPResponse<void>>(`/order/${order.uuid}/download`)
+				http.get<Blob>(`/order/${order.uuid}/download`)
 					.then(({ data }) => {
-						if (data.success) {
-							resolve();
-						} else {
-							reject(data.error);
-						}
+						console.log(data)
+						// const f = new File([data.data], 'invoice.pdf')
+						const file = window.URL.createObjectURL(data);
+						window.location.assign(file)
 					})
 					.catch((error) => reject(error))
 			})
@@ -139,13 +148,16 @@ const store = {
 const { dispatch, read } = getStoreAccessors<State, RootState>("orders");
 const { actions, getters } = store;
 
-export const orders = read(getters.orders);
+export const getOrders = read(getters.getOrders);
+
 export const createOrder = dispatch(actions.createOrder);
 export const deleteOrder = dispatch(actions.deleteOrder);
 export const getOrderDashboard = dispatch(actions.getOrderDashboard);
 export const getOrderLocation = dispatch(actions.getOrderLocation);
 export const editOrder = dispatch(actions.editOrder);
 export const getOrder = dispatch(actions.getOrder);
-export const listOrders = dispatch(actions.listOrders);
+export const fetchOrders = dispatch(actions.fetchOrders);
+export const fetchUserOrders = dispatch(actions.fetchUserOrders);
+export const downloadOrderInvoice = dispatch(actions.downloadOrderInvoice );
 
 export default store;

@@ -14,32 +14,32 @@
 
 		<h3>Shipping Address</h3>
 
-		<template v-if="selectedMethod === 'card'">
-			<v-text-field label="Credit Card Number*"></v-text-field>
+		<template v-if="selectedMethod === paymentType.CARD">
+			<v-text-field label="Credit Card Number*" v-model="card.number"></v-text-field>
 			<div class="d-flex">
-				<v-text-field label="Expiry*"></v-text-field>
+				<v-text-field label="Expiry*" v-model="card.expire_date"></v-text-field>
 				<v-spacer></v-spacer>
-				<v-text-field label="CVV*"></v-text-field>
+				<v-text-field label="CVV*" v-model="card.ccv"></v-text-field>
 			</div>
 		</template>
 		
-		<template v-if="selectedMethod === 'cash'">
+		<template v-if="selectedMethod === paymentType.CASH">
 			<div class="d-flex">
-				<v-text-field label="First name*"></v-text-field>
+				<v-text-field label="First name*" v-model="cash.first_name"></v-text-field>
 				<v-spacer></v-spacer>
-				<v-text-field label="Last name*"></v-text-field>
+				<v-text-field label="Last name*" v-model="cash.last_name"></v-text-field>
 			</div>
-			<v-text-field label="Address line 1*"></v-text-field>
-			<v-text-field label="Address line 2*"></v-text-field>
+			<v-text-field label="Address line 1*" v-model="cash.address"></v-text-field>
+			<v-text-field label="Address line 2*" v-model="cash.address"></v-text-field>
 			<v-checkbox label="I consent to your T&C's"></v-checkbox>
 		</template>
 		
-		<template v-if="selectedMethod === 'bank'">
-			<v-text-field label="Bank SWIFT code*"></v-text-field>
+		<template v-if="selectedMethod === paymentType.BANK">
+			<v-text-field label="Bank SWIFT code*" v-model="bank.swift"></v-text-field>
 			<div class="d-flex">
-				<v-text-field label="IBAN*"></v-text-field>
+				<v-text-field label="IBAN*" v-model="bank.iban"></v-text-field>
 				<v-spacer></v-spacer>
-				<v-text-field label="Name*"></v-text-field>
+				<v-text-field label="Name*" v-model="bank.name"></v-text-field>
 			</div>
 			<v-text-field label="Ref code*"></v-text-field>
 		</template>
@@ -49,24 +49,34 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 
+import { PaymentType, CardPayment, BankPayment, CashPayment} from '@/types/Payment';
+
 @Component
 export default class PaymentMethod extends Vue {
-	private selectedMethod = 'card';
+	private selectedMethod = PaymentType.CARD;
+
+	private card = new CardPayment;
+	private cash = new CashPayment;
+	private bank = new BankPayment;
+
+	get paymentType(): typeof PaymentType {
+		return PaymentType; 
+	}
 
 	private methods = [
 		{
 			text: 'Credit Card',
 			icon: 'credit-card',
-			value: 'card'
+			value: PaymentType.CARD 
 		},
 		{
 			text: 'Cash on delivery',
 			icon: 'cash',
-			value: 'cash'
+			value: PaymentType.CASH
 		},{
 			text: 'Bank Transfer',
 			icon: 'compare-horizontal',
-			value: 'bank'
+			value: PaymentType.BANK 
 		},
 	]
 }
