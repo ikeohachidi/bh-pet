@@ -4,8 +4,18 @@
 			<v-row>
 				<v-col cols="6" offset="3">
 					<h1 class="text-h2 product-header">Dry dog food</h1>
-					<div class="d-flex justify-end">
-						<v-select label="Sort by"></v-select>
+					<div class="d-flex">
+						<v-spacer></v-spacer>
+						<v-col cols="4">
+							<v-select 
+								label="Sort by" 
+								v-model="selectedSortOption"
+								item-text="text"
+								item-value="value"
+								:full-width="false"
+								:items="sortOptions"
+							></v-select>
+						</v-col>
 					</div>
 				</v-col>
 
@@ -86,12 +96,23 @@ import Product, { CartItem } from '@/types/Product';
 	}
 })
 export default class Category extends Vue {
+	private selectedSortOption = 'desc';
+
+	private sortOptions = [
+		{ text: 'Highest Price First', value: 'desc', },
+		{ text: 'Lowest Price First', value: 'asc', }
+	]
+
 	get categoryId(): string {
 		return this.$route.params['id']
 	}
 
 	get products(): Product[] {
-		return getProductsByCategoryId(this.$store)(this.categoryId);
+		return getProductsByCategoryId(this.$store)(this.categoryId)
+			.sort((a, b) => {
+				if (this.selectedSortOption === 'desc') return b.price - a.price;
+				return a.price - b.price
+			})
 	}
 
 	get cartItems(): CartItem[] {
