@@ -1,5 +1,16 @@
 <template>
 	<section>
+		<UserInfoForm :info="paymentDetails">
+			<template #header>
+				<h3>Payment Details</h3>
+			</template>
+			<template #footer>
+				<v-checkbox label="Payment details are same as shipping details"></v-checkbox>
+			</template>
+		</UserInfoForm>
+
+		<h3 class="mb-4">Type of Payment</h3>
+
 		<div class="methods mb-10">
 			<div 
 				v-for="{ text, icon, value } in methods" :key="icon" 
@@ -11,8 +22,6 @@
 				<p class="my-0">{{ text }}</p>
 			</div>
 		</div>
-
-		<h3>Shipping Address</h3>
 
 		<template v-if="selectedMethod === paymentType.CARD">
 			<v-text-field label="Credit Card Number*" v-model="card.number"></v-text-field>
@@ -49,11 +58,19 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 
-import { PaymentType, CardPayment, BankPayment, CashPayment} from '@/types/Payment';
+import UserInfoForm from '@/components/UserInfoForm/UserInfoForm.vue';
 
-@Component
+import { PaymentType, CardPayment, BankPayment, CashPayment, ShippingDetails} from '@/types/Payment';
+
+@Component({
+	components: {
+		UserInfoForm
+	}
+})
 export default class PaymentMethod extends Vue {
 	private selectedMethod = PaymentType.CARD;
+
+	private paymentDetails: ShippingDetails = new ShippingDetails;
 
 	private card = new CardPayment;
 	private cash = new CashPayment;
