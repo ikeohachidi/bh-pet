@@ -32,17 +32,32 @@
 						</v-stepper-header>
 					</v-stepper>
 
-					<UserInfoForm v-if="activeStep === 1" :info="shippingDetails">
+					<UserInfoForm 
+						v-if="activeStep === 1" 
+						:info="shippingDetails"
+					>
 						<template #header>
 							<h3>Shipping Address</h3>
 						</template>
 						<template #footer>
-							<v-checkbox label="Use this address for payment details"></v-checkbox>
+							<v-checkbox v-model="useAsPaymentDetails" label="Use this address for payment details"></v-checkbox>
 						</template>
 					</UserInfoForm>
 
-					<PaymentMethod v-if="activeStep === 2"/>
-					<OrderSummary v-if="activeStep === 3" @change-step="goToStep"/>
+					<PaymentMethod 
+						v-if="activeStep === 2"
+						:card="card"
+						:bank="bank"
+						:cash="cash"
+						:paymentDetails="useAsPaymentDetails ? shippingDetails : paymentDetails"
+						:useShippingDetails.sync="useAsPaymentDetails"
+					/>
+					<OrderSummary 
+						v-if="activeStep === 3" 
+						@change-step="goToStep"
+						:shippingDetails="shippingDetails"
+						:paymentDetails="useAsPaymentDetails ? shippingDetails : paymentDetails"
+					/>
 
 					<div class="d-flex">
 						<template v-if="activeStep < 3">
@@ -65,7 +80,7 @@ import PaymentMethod from '@/components/PaymentMethod/PaymentMethod.vue';
 import OrderSummary from '@/components/OrderSummary/OrderSummary.vue';
 import UserInfoForm from '@/components/UserInfoForm/UserInfoForm.vue';
 
-import { ShippingDetails } from '@/types/Payment';
+import { PaymentType, CardPayment, BankPayment, CashPayment, ShippingDetails} from '@/types/Payment';
 
 @Component({
 	components: {
@@ -78,6 +93,13 @@ export default class Checkout extends Vue {
 	private activeStep = 1;
 
 	private shippingDetails: ShippingDetails = new ShippingDetails;
+	private paymentDetails: ShippingDetails = new ShippingDetails;
+
+	private card = new CardPayment;
+	private cash = new CashPayment;
+	private bank = new BankPayment;
+
+	private useAsPaymentDetails = false;
 
 	private goToStep(step: number) {
 		if (step > 3 || step === 0) return;

@@ -6,6 +6,13 @@
 				<h3>Shipping address</h3>
 				<p @click="moveToStep(1)">Edit</p>
 			</div>
+			<ul>
+				<li>{{ shippingDetails.first_name }} {{ shippingDetails.last_name }}</li>
+				<li>{{ shippingDetails.address1 }}</li>
+				<li>{{ shippingDetails.address2 }}</li>
+				<li>{{ shippingDetails.city }}, {{ shippingDetails.state }}</li>
+				<li>{{ shippingDetails.zip_code }}, {{ shippingDetails.country }}</li>
+			</ul>
 		</div>
 
 		<div class="detail-section">
@@ -13,6 +20,13 @@
 				<h3>Payment Details</h3>
 				<p @click="moveToStep(2)">Edit</p>
 			</div>
+			<ul>
+				<li>{{ paymentDetails.first_name }} {{ paymentDetails.last_name }}</li>
+				<li>{{ paymentDetails.address1 }}</li>
+				<li>{{ paymentDetails.address2 }}</li>
+				<li>{{ paymentDetails.city }}, {{ paymentDetails.state }}</li>
+				<li>{{ paymentDetails.zip_code }}, {{ paymentDetails.country }}</li>
+			</ul>
 		</div>
 
 		<div class="detail-section">
@@ -37,16 +51,16 @@
 			</div>
 			<ul>
 				<li>
-					<p>Subtotal before delievery</p>
-					<p>{{ productSum }}</p>
+					<span>Subtotal before delievery</span>
+					<span>{{ productSum }}</span>
 				</li>
 				<li>
-					<p>Delivery Charge</p>
-					<p>{{ deliveryCharge }}</p>
+					<span>Delivery Charge</span>
+					<span>{{ deliveryCharge }}</span>
 				</li>
 				<li>
 					<h3>Total</h3>
-					<p>{{ totalAmount }}</p>
+					<span>{{ totalAmount }}</span>
 				</li>
 			</ul>
 		</div>
@@ -54,10 +68,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 
 import CartItem from '@/components/CartItem/CartItem.vue';
 import { getProductsInCart } from '@/store/modules/products';
+import { ShippingDetails } from '@/types/Payment';
 
 @Component({
 	components: {
@@ -65,7 +80,11 @@ import { getProductsInCart } from '@/store/modules/products';
 	}
 })
 export default class OrderSummary extends Vue {
+	@Prop({ default: () => (new ShippingDetails) }) shippingDetails!: ShippingDetails;
+	@Prop({ default: () => (new ShippingDetails) }) paymentDetails!: ShippingDetails;
+
 	private deliveryCharge = 25000;
+
 
 	get productsInCart() {
 		return getProductsInCart(this.$store)
@@ -90,6 +109,11 @@ export default class OrderSummary extends Vue {
 </script>
 
 <style lang="scss" scoped>
+ul {
+	list-style: none;
+	padding: 0;
+}
+
 .detail-section {
 	p {
 		margin-bottom: 0;
@@ -108,11 +132,6 @@ export default class OrderSummary extends Vue {
 	}
 
 	&:last-of-type {
-		ul {
-			list-style: none;
-			padding: 0;
-		}
-
 		li	{
 			display: flex;
 			justify-content: space-between;

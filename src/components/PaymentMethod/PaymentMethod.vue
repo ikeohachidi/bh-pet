@@ -5,7 +5,7 @@
 				<h3>Payment Details</h3>
 			</template>
 			<template #footer>
-				<v-checkbox label="Payment details are same as shipping details"></v-checkbox>
+				<v-checkbox :value="useShippingDetails" @change="onShippingDetailsChange" label="Payment details are same as shipping details"></v-checkbox>
 			</template>
 		</UserInfoForm>
 
@@ -56,7 +56,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 
 import UserInfoForm from '@/components/UserInfoForm/UserInfoForm.vue';
 
@@ -68,13 +68,17 @@ import { PaymentType, CardPayment, BankPayment, CashPayment, ShippingDetails} fr
 	}
 })
 export default class PaymentMethod extends Vue {
+	@Prop({ default: () => (new CardPayment) }) card!: CardPayment;
+	@Prop({ default: () => (new CashPayment) }) cash!: CashPayment;
+	@Prop({ default: () => (new BankPayment) }) bank!: BankPayment;
+	@Prop({ default: () => (new ShippingDetails) }) paymentDetails!: ShippingDetails;
+	@Prop({ default: false }) useShippingDetails!: boolean;
+
 	private selectedMethod = PaymentType.CARD;
 
-	private paymentDetails: ShippingDetails = new ShippingDetails;
-
-	private card = new CardPayment;
-	private cash = new CashPayment;
-	private bank = new BankPayment;
+	onShippingDetailsChange(value: boolean) {
+		this.$emit('update:useShippingDetails', value);
+	}
 
 	get paymentType(): typeof PaymentType {
 		return PaymentType; 
