@@ -10,7 +10,7 @@
 				<p>{{ product.brand.title }}</p>
 				<h1 class="my-6 text-h5">{{ product.price }} kn</h1>
 
-				<div class="d-flex">
+				<div class="d-flex" v-if="canAddToCart">
 					<div class="d-flex mr-4" style="width: 140px">
 						<v-btn icon tile elevation="0" @click="amount--">
 							<v-icon>mdi-minus</v-icon>
@@ -59,6 +59,7 @@ import {
 @Component
 export default class CartItem extends Vue {
 	@Prop({ default: () => ({}) }) product!: Product;
+	@Prop({ default: true }) canAddToCart!: boolean;
 
 	private api = process.env.VUE_APP_API;
 
