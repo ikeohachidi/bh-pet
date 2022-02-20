@@ -107,6 +107,18 @@ export default class Checkout extends Vue {
 		if (step > 3 || step === 0) return;
 		this.activeStep = step;
 	}
+
+	private placeOrder() {
+		const payment: Payment = {
+			type: this.selectedPaymentMethod,
+			details: this.card
+		}
+
+		if (this.selectedPaymentMethod === PaymentType.CASH) payment.details = this.cash;
+		if (this.selectedPaymentMethod === PaymentType.BANK) payment.details = this.bank;
+
+		createPayment(this.$store, payment)
+	}
 }
 </script>
 
