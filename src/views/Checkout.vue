@@ -5,25 +5,15 @@
 				<v-col cols="4" class="mx-auto">
 					<h1 class="text-h2 mb-15">Checkout</h1>
 
-					<h3>Shipping Address</h3>
-					<div class="d-flex">
-						<v-text-field label="First name*"></v-text-field>
-						<v-spacer></v-spacer>
-						<v-text-field label="Last name*"></v-text-field>
-					</div>
-					<v-text-field label="Address line 1*"></v-text-field>
-					<v-text-field label="Address line 2*"></v-text-field>
-					<div class="d-flex">
-						<v-text-field label="City"></v-text-field>
-						<v-spacer></v-spacer>
-						<v-text-field label="State/Province/Region"></v-text-field>
-					</div>
-					<div class="d-flex">
-						<v-text-field label="Zip/Postal Code*"></v-text-field>
-						<v-spacer></v-spacer>
-						<v-text-field label="Country"></v-text-field>
-					</div>
-					<v-checkbox label="Use this address for payment details"></v-checkbox>
+
+					<UserInfoForm v-if="activeStep === 1" :info="shippingDetails">
+						<template #header>
+							<h3>Shipping Address</h3>
+						</template>
+						<template #footer>
+							<v-checkbox label="Use this address for payment details"></v-checkbox>
+						</template>
+					</UserInfoForm>
 
 					<PaymentMethod/>
 
@@ -41,13 +31,15 @@
 import { Vue, Component } from 'vue-property-decorator';
 
 import PaymentMethod from '@/components/PaymentMethod/PaymentMethod.vue';
+import UserInfoForm from '@/components/UserInfoForm/UserInfoForm.vue';
 
+import { ShippingDetails } from '@/types/Payment';
 @Component({
 	components: {
-		PaymentMethod
+		UserInfoForm
 	}
 })
-export default class Checkout extends Vue {}
+	private shippingDetails: ShippingDetails = new ShippingDetails;
 </script>
 
 <style scoped>

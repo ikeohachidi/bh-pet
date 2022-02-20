@@ -26,3 +26,14 @@ export class BankPayment {
 	name = '';
 	swift = '';
 }
+
+export class ShippingDetails {
+	first_name = '';
+	last_name = '';
+	address1 = '';
+	address2 = '';
+	city = '';
+	state = '';
+	zip_code = '';
+	country = '';
+}

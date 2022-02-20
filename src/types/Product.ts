@@ -4,7 +4,7 @@ export default interface Product {
 	uuid: string;
 	category_uuid: string;
 	title: string;
-	price: string;
+	price: number;
 	description: string;
 	metadata: {
 		brand: string;
