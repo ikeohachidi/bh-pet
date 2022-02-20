@@ -45,7 +45,7 @@
 								</div>
 								<div>
 									<small>Marketing preferences</small>
-									<p>{{ user.is_marketing }}</p>
+									<p>{{ user.is_marketing ? 'Yes' : 'No' }}</p>
 								</div>
 							</v-col>
 						</v-row>
@@ -62,12 +62,12 @@
 								<h3 class="px-4">Latest Orders</h3>
 							</template>
 							<template #item.status="{ item }">
-								<v-chip :color="getStatusColor(item.status)">
-									<span class="item-status">{{ item.status }}</span>
+								<v-chip :color="getStatusColor(item.order_status[0].title)">
+									<span class="item-status">{{ item.order_status[0].title }}</span>
 								</v-chip>
 							</template>
-							<template #item.invoice>
-								<v-btn icon tile class="item-invoice">
+							<template #item.invoice="{ item }">
+								<v-btn icon tile class="item-invoice" @click="downloadInvoice(item)">
 									<v-icon>mdi-tray-arrow-down</v-icon>
 								</v-btn>
 							</template>
