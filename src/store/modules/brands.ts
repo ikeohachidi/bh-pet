@@ -18,6 +18,11 @@ const state: State = {
 const store = {
 	namespaced: true,
 	state,
+	getters: {
+		getBrands(state: State): Brand[] {
+			return state.brands;
+		}
+	},
 	mutations: {
 		addBrand(state: State, brand: Brand): void {
 			state.brands.push(brand);
@@ -27,16 +32,12 @@ const store = {
 		},
 	},
 	actions: {
-		listBrands(context: Context, brands: Brand[]): Promise<void> {
+		fetchBrands(context: Context): Promise<void> {
 			return new Promise((resolve, reject) => {
-				http.get<HTTPResponse<void>>("/brands")
+				http.get<HTTPResponse<Brand[]>>("/brands")
 					.then(({ data }) => {
-						if (data.success) {
-							context.commit('setBrands', brands)
-							resolve();
-						} else {
-							reject(data.error);
-						}
+						context.commit('setBrands', data.data)
+						resolve();
 					})
 					.catch((error) => reject(error))
 			})
@@ -96,13 +97,15 @@ const store = {
 	}
 }
 
-const { dispatch } = getStoreAccessors<State, RootState>("brands");
-const { actions } = store;
+const { dispatch, read } = getStoreAccessors<State, RootState>("brands");
+const { actions, getters } = store;
+
+export const getBrands = read(getters.getBrands);
 
 export const createBrand = dispatch(actions.createBrand);
 export const deleteBrand = dispatch(actions.deleteBrand);
 export const editBrand = dispatch(actions.editBrand);
 export const getBrand = dispatch(actions.getBrand);
-export const listBrands = dispatch(actions.listBrands);
+export const fetchBrands = dispatch(actions.fetchBrands);
 
 export default store;
