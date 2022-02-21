@@ -68,8 +68,11 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 
 import CartItem from '@/components/CartItem/CartItem.vue';
-import { getProductsInCart } from '@/store/modules/products';
+
 import { ShippingDetails } from '@/types/Payment';
+import Product from '@/types/Product';
+
+import { getProductsInCart } from '@/store/modules/products';
 
 @Component({
 	components: {
@@ -82,15 +85,15 @@ export default class OrderSummary extends Vue {
 
 	private deliveryCharge = 25000;
 
-	get productsInCart() {
+	get productsInCart(): (Product & { amount: number })[] {
 		return getProductsInCart(this.$store)
 	}
 
-	get productSum() {
+	get productSum(): number {
 		return this.productsInCart.reduce((acc, product) => acc + (product.price * product.amount), 0)
 	}
 
-	get totalAmount() {
+	get totalAmount(): number {
 		return this.productSum + this.deliveryCharge
 	}
 

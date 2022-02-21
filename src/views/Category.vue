@@ -222,7 +222,7 @@ export default class Category extends Vue {
 		removeProductFromCart(this.$store, product.uuid);
 	}
 
-	mounted() {
+	mounted(): void {
 		if (this.brands.length === 0) {
 			fetchBrands(this.$store);
 		}
