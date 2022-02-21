@@ -82,13 +82,12 @@ export default class OrderSummary extends Vue {
 
 	private deliveryCharge = 25000;
 
-
 	get productsInCart() {
 		return getProductsInCart(this.$store)
 	}
 
 	get productSum() {
-		return this.productsInCart.reduce((acc, product) => acc + product.price, 0)
+		return this.productsInCart.reduce((acc, product) => acc + (product.price * product.amount), 0)
 	}
 
 	get totalAmount() {

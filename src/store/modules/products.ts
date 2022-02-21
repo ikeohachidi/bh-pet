@@ -27,12 +27,12 @@ const store = {
 		cartItems(state: State): CartItem[] {
 			return state.cart;
 		},
-		getProductsInCart(state: State): Product[] {
-			const products: Product[] = [];
+		getProductsInCart(state: State): (Product & {amount: number})[] {
+			const products: (Product & {amount: number})[] = [];
 
 			state.cart.forEach(item => {
 				const product = state.products.find(product => product.uuid === item.productUUID);
-				if (product) products.push(product);
+				if (product) products.push({ ...product, amount: item.amount });
 			})
 
 			return products;
