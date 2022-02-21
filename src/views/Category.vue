@@ -3,7 +3,10 @@
 		<v-container>
 			<v-row>
 				<v-col cols="6" offset="3">
-					<h1 class="text-h2 product-header">Dry dog food</h1>
+					<h1 class="text-h2 product-header">
+						<span v-if="selectedCategory">{{ selectedCategory.title }}</span>
+						<span v-else>All</span>
+					</h1>
 					<div class="d-flex">
 						<v-spacer></v-spacer>
 						<v-col cols="4">
@@ -45,6 +48,10 @@
 								<v-list-item-title class="font-weight-bold">BRAND</v-list-item-title>
 							</template>
 
+							<v-list-item dense @click="selectedBrandId = 'all'" >
+								<span :class="(selectedBrandId == 'all') && 'active-text'">All</span>
+							</v-list-item>
+
 							<v-list-item 
 								dense
 								v-for="brand in brands" 
@@ -66,18 +73,22 @@
 								<v-list-item-title class="font-weight-bold">CATEGORY</v-list-item-title>
 							</template>
 
+							<v-list-item dense @click="updateActiveCategory('all')">
+								<span :class="(categoryId == 'all') && 'active-text'">All</span>
+							</v-list-item>
+
 							<v-list-item
 								dense
 								v-for="category in categories" 
 								:key="category.uuid" 
-								@click="updateActiveCategory(category)"
+								@click="updateActiveCategory(category.uuid)"
 							>
 								<p 
 									class="d-flex justify-space-between w-100 text-capitalize mb-0"
 									:class="(categoryId == category.uuid) && 'active-text'"
 								>
 									<span>{{ category.title }}</span>
-									<span>({{ getCatgoriesProducts(category.uuid).length }})</span>
+									<span>({{ category.uuid === 'all' ? categories.length : getCatgoriesProducts(category.uuid).length }})</span>
 								</p>
 							</v-list-item>
 						</v-list-group>
@@ -137,7 +148,7 @@ import CategoryType from '@/types/Category';
 })
 export default class Category extends Vue {
 	private selectedSortOption = 'desc';
-	private selectedBrandId = '';
+	private selectedBrandId = 'all';
 
 	private sortOptions = [
 		{ text: 'Highest Price First', value: 'desc', },
@@ -150,6 +161,10 @@ export default class Category extends Vue {
 		return this.$route.params['id']
 	}
 
+	get selectedCategory(): CategoryType {
+		return this.categories.find(category => category.uuid === this.$route.params['id']) as CategoryType;
+	}
+
 	get products(): Product[] {
 		return getProducts(this.$store) 
 	}
@@ -158,8 +173,8 @@ export default class Category extends Vue {
 		return this.products
 			.filter(product => {
 				return product.price <= this.priceRange
-				&& product.category_uuid === this.categoryId
-				&& product.brand.uuid === this.selectedBrandId
+				&& (this.categoryId === 'all' ? true : product.category_uuid === this.categoryId)
+				&& (this.selectedBrandId === 'all' ? true : product.brand.uuid === this.selectedBrandId)
 			})
 			.sort((a, b) => {
 				if (this.selectedSortOption === 'desc') return b.price - a.price;
@@ -183,8 +198,8 @@ export default class Category extends Vue {
 		return cartItems(this.$store);
 	}
 
-	private updateActiveCategory(category: CategoryType): void {
-		this.$router.push({ path: `/shop/category/${category.uuid}` })
+	private updateActiveCategory(categoryUUID: string): void {
+		this.$router.push({ path: `/shop/category/${categoryUUID}` })
 	}
 
 	private isProductInCart(productUUID: string): boolean {
