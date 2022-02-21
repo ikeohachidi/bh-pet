@@ -17,19 +17,28 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 
-import { fetchBlogPosts, fetchPromotions } from '@/store/modules/shop';
-import { fetchCategories } from '@/store/modules/categories';
-import { fetchProducts } from '@/store/modules/products';
+import { fetchBlogPosts, fetchPromotions, getPromotions, getPosts } from '@/store/modules/shop';
+import { fetchCategories, getCategories } from '@/store/modules/categories';
+import { fetchProducts, getProducts } from '@/store/modules/products';
 
 @Component
 export default class Shop extends Vue {
 	mounted(): void {
-		Promise.allSettled([
-			fetchBlogPosts(this.$store),
-			fetchPromotions(this.$store),
-			fetchCategories(this.$store),
+		if (getProducts(this.$store).length === 0) {
 			fetchProducts(this.$store)
-		])
+		}
+
+		if (getCategories(this.$store).length === 0) {
+			fetchCategories(this.$store)
+		}
+
+		if (getPromotions(this.$store).length === 0) {
+			fetchPromotions(this.$store)
+		}
+
+		if (getPosts(this.$store).length === 0) {
+			fetchBlogPosts(this.$store)
+		}
 	}
 }
 </script>
