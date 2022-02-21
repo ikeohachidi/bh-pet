@@ -21,3 +21,10 @@ export class Credential {
 	email = '';
 	password = '';
 }
+
+export class ResetPassword {
+	token = '';
+	email = '';
+	password = '';
+	password_confirmation = '';
+}

@@ -3,7 +3,7 @@ import { getStoreAccessors } from 'vuex-typescript';
 
 import http, { HTTPResponse, TOKEN } from '../http';
 import { RootState } from '..';
-import User, { Credential } from '@/types/User';
+import User, { Credential, ResetPassword } from '@/types/User';
 
 export type State = {
 	user: User;
@@ -135,28 +135,20 @@ const store = {
 					.catch((error) => reject(error))
 			})
 		},
-		forgotPassword(context: Context): Promise<void> {
+		forgotPassword(context: Context, email: string): Promise<{ reset_token: string }> {
 			return new Promise((resolve, reject) => {
-				http.post<HTTPResponse<void>>("/user/forgot-password")
+				http.post<HTTPResponse<{ reset_token: string }>>("/user/forgot-password", { email })
 					.then(({ data }) => {
-						if (data.success) {
-							resolve();
-						} else {
-							reject(data.error);
-						}
+						resolve(data.data);
 					})
 					.catch((error) => reject(error))
 			})
 		},
-		resetPasswordToken(context: Context): Promise<void> {
+		resetPasswordToken(context: Context, resetPassword: ResetPassword): Promise<{ message: string }> {
 			return new Promise((resolve, reject) => {
-				http.post<HTTPResponse<void>>("/user/reset-password-token")
+				http.post<HTTPResponse<{ message: string }>>("/user/reset-password-token", resetPassword)
 					.then(({ data }) => {
-						if (data.success) {
-							resolve();
-						} else {
-							reject(data.error);
-						}
+						resolve(data.data);
 					})
 					.catch((error) => reject(error))
 			})
