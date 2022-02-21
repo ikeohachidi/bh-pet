@@ -121,6 +121,13 @@ export default class CartItem extends Vue {
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		overflow: hidden;
+
+		img {
+			object-fit: scale-down;
+			width: 100%;
+			object-position: center;
+		}
 	}
 }
 </style>
