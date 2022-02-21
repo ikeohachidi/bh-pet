@@ -1,3 +1,4 @@
+import Brand from "./Brand";
 import Category from "./Category";
 
 export default interface Product {
@@ -10,6 +11,7 @@ export default interface Product {
 		brand: string;
 		image: string;
 	};
+	brand: Brand;
 	created_at: string;
 	updated_at: string;
 	deleted_at: string;

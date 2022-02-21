@@ -25,12 +25,16 @@
 					<v-list>
 						<v-list-group>
 							<template #activator>
-								<v-list-item-title>PRICE</v-list-item-title>
+								<v-list-item-title class="font-weight-bold">PRICE</v-list-item-title>
 							</template>
 
 							<v-list-item>
 								<div class="d-flex flex-column w-100">
-									<v-slider :max="mostExpensiveProduct" v-model="priceRange"></v-slider>
+									<v-slider 
+										:max="mostExpensiveProduct" 
+										:min="0"
+										v-model="priceRange"
+									></v-slider>
 									<v-btn class="ml-auto" max-width="800px" right outlined>{{ priceRange }} KN</v-btn>
 								</div>
 							</v-list-item>
@@ -38,11 +42,43 @@
 
 						<v-list-group>
 							<template #activator>
-								<v-list-item-title>BRAND</v-list-item-title>
+								<v-list-item-title class="font-weight-bold">BRAND</v-list-item-title>
 							</template>
 
-							<v-list-item>
-								<p class="d-flex justify-space-between w-100">Alleva <span>(7)</span></p>
+							<v-list-item 
+								dense
+								v-for="brand in brands" 
+								:key="brand.uuid"
+								@click="selectedBrandId = brand.uuid"
+							>
+								<p 
+									class="d-flex justify-space-between w-100 text-capitalize mb-0"
+									:class="(selectedBrandId == brand.uuid) && 'active-text'"
+								>
+									<span>{{ brand.title }}</span>
+									<span>({{ getBrandProducts(brand.uuid).length }})</span>
+								</p>
+							</v-list-item>
+						</v-list-group>
+
+						<v-list-group>
+							<template #activator>
+								<v-list-item-title class="font-weight-bold">CATEGORY</v-list-item-title>
+							</template>
+
+							<v-list-item
+								dense
+								v-for="category in categories" 
+								:key="category.uuid" 
+								@click="updateActiveCategory(category)"
+							>
+								<p 
+									class="d-flex justify-space-between w-100 text-capitalize mb-0"
+									:class="(categoryId == category.uuid) && 'active-text'"
+								>
+									<span>{{ category.title }}</span>
+									<span>({{ getCatgoriesProducts(category.uuid).length }})</span>
+								</p>
 							</v-list-item>
 						</v-list-group>
 					</v-list>
@@ -86,9 +122,13 @@ import { Vue, Component } from 'vue-property-decorator';
 
 import ProductCard from '@/components/ProductCard/ProductCard.vue';
 
-import { getProductsByCategoryId, addProductToCart, cartItems, removeProductFromCart } from '@/store/modules/products';
+import { addProductToCart, cartItems, removeProductFromCart, getProducts } from '@/store/modules/products';
+import { fetchBrands, getBrands } from '@/store/modules/brands';
+import { fetchCategories, getCategories } from '@/store/modules/categories';
 
 import Product, { CartItem } from '@/types/Product';
+import Brand from '@/types/Brand';
+import CategoryType from '@/types/Category';
 
 @Component({
 	components: {
@@ -97,6 +137,7 @@ import Product, { CartItem } from '@/types/Product';
 })
 export default class Category extends Vue {
 	private selectedSortOption = 'desc';
+	private selectedBrandId = '';
 
 	private sortOptions = [
 		{ text: 'Highest Price First', value: 'desc', },
@@ -110,16 +151,28 @@ export default class Category extends Vue {
 	}
 
 	get products(): Product[] {
-		return getProductsByCategoryId(this.$store)(this.categoryId)
+		return getProducts(this.$store) 
 	}
 
 	get sortedProducts(): Product[] {
 		return this.products
-			.filter(product => product.price <= this.priceRange)
+			.filter(product => {
+				return product.price <= this.priceRange
+				&& product.category_uuid === this.categoryId
+				&& product.brand.uuid === this.selectedBrandId
+			})
 			.sort((a, b) => {
 				if (this.selectedSortOption === 'desc') return b.price - a.price;
 				return a.price - b.price
 			})
+	}
+
+	get brands(): Brand[] {
+		return getBrands(this.$store);
+	}
+
+	get categories(): CategoryType[] {
+		return getCategories(this.$store);
 	}
 
 	get mostExpensiveProduct(): number {
@@ -130,8 +183,20 @@ export default class Category extends Vue {
 		return cartItems(this.$store);
 	}
 
+	private updateActiveCategory(category: CategoryType): void {
+		this.$router.push({ path: `/shop/category/${category.uuid}` })
+	}
+
 	private isProductInCart(productUUID: string): boolean {
 		return this.cartItems.findIndex(item => item.productUUID === productUUID) !== -1;
+	}
+
+	private getBrandProducts(brandUUID: string) {
+		return this.products.filter(product => product.brand.uuid === brandUUID);
+	}
+
+	private getCatgoriesProducts(categoryUUID: string) {
+		return this.products.filter(product => product.category_uuid === categoryUUID);
 	}
 
 	private addProductToCart(product: Product): void {
@@ -140,6 +205,16 @@ export default class Category extends Vue {
 
 	private removeProductFromCart(product: Product): void {
 		removeProductFromCart(this.$store, product.uuid);
+	}
+
+	mounted() {
+		if (this.brands.length === 0) {
+			fetchBrands(this.$store);
+		}
+		
+		if (this.categories.length === 0) {
+			fetchCategories(this.$store)
+		}
 	}
 }
 </script>
