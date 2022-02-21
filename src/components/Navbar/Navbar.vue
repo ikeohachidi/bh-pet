@@ -1,20 +1,22 @@
 <template>
 	<v-app-bar app color="primary" dark>
-		<div class="d-flex align-center">
-			<v-img
-				alt="Pet shop Logo"
-				class="shrink mr-2"
-				contain
-				src="@/assets/logo.svg"
-				transition="scale-transition"
-				width="30"
-			/>
-			<span>petson.</span>
+		<div>
+			<router-link to="/" tag="div" class="d-flex align-center pointer">
+				<v-img
+					alt="Pet shop Logo"
+					class="shrink mr-2"
+					contain
+					src="@/assets/logo.svg"
+					transition="scale-transition"
+					width="30"
+				/>
+				<span>petson.</span>
+			</router-link>
 		</div>
 
 		<v-spacer></v-spacer>
 		<div>
-			<v-btn plain>PRODUCTS</v-btn>
+			<v-btn plain to="/shop/category/all">PRODUCTS</v-btn>
 			<v-btn plain>PROMOTIONS</v-btn>
 			<v-btn plain>BLOG</v-btn>
 		</div>
