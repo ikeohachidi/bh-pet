@@ -3,7 +3,7 @@
 		<v-container>
 			<v-row>
 				<v-col cols="6" offset="3">
-					<h1 class="text-h2 product-header">
+					<h1 class="text-h2 product-header text-capitalize">
 						<span v-if="selectedCategory">{{ selectedCategory.title }}</span>
 						<span v-else>All</span>
 					</h1>
