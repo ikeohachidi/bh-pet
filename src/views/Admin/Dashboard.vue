@@ -47,6 +47,7 @@ import Order, { OrderStatus } from '@/types/Order';
 import { Vue, Component } from 'vue-property-decorator';
 import { getOrderDashboard, getOrders } from '@/store/modules/orders';
 
+import { fetchOrders, getOrders } from '@/store/modules/orders';
 import Order, { OrderStatus } from '@/types/Order';
 import { getMonth } from '@/helpers';
 
@@ -126,7 +127,9 @@ export default class Dashboard extends Vue {
 	}
 
 	mounted(): void {
-		getOrderDashboard(this.$store);
+		if (this.orders.length === 0) {
+			fetchOrders(this.$store)
+		}
 	}
 }
 </script>
