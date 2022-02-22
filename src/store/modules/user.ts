@@ -53,7 +53,7 @@ const store = {
 					})
 			})
 		},
-		deleteUser(context: Context, credential: Credential): Promise<void> {
+		deleteUser(): Promise<void> {
 			return new Promise((resolve, reject) => {
 				http.delete<HTTPResponse<void>>("/user")
 					.then(({ data }) => {
@@ -66,24 +66,12 @@ const store = {
 					.catch((error) => reject(error))
 			})
 		},
-		getUserOrders(context: Context): Promise<void> {
+		editUser(context: Context, user: User): Promise<void> {
 			return new Promise((resolve, reject) => {
-				http.delete<HTTPResponse<void>>("/user/orders")
+				http.put<HTTPResponse<void>>("/user/edit", user)
 					.then(({ data }) => {
 						if (data.success) {
-							resolve();
-						} else {
-							reject(data.error);
-						}
-					})
-					.catch((error) => reject(error))
-			})
-		},
-		editUser(context: Context): Promise<void> {
-			return new Promise((resolve, reject) => {
-				http.put<HTTPResponse<void>>("/user/edit")
-					.then(({ data }) => {
-						if (data.success) {
+							context.commit('setUser', user)
 							resolve();
 						} else {
 							reject(data.error);
@@ -166,7 +154,6 @@ export const fetchUserData = dispatch(actions.fetchUserData);
 export const createUser = dispatch(actions.createUser);
 export const editUser = dispatch(actions.editUser);
 export const deleteUser = dispatch(actions.deleteUser);
-export const getUserOrders = dispatch(actions.getUserOrders);
 export const forgotPassword = dispatch(actions.forgotPassword);
 export const resetPasswordToken = dispatch(actions.resetPasswordToken);
 export const logOut = dispatch(actions.logOut);
