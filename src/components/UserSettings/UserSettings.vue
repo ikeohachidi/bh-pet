@@ -120,9 +120,9 @@ export default class UserSettings extends Vue {
 		const statusColor: Record<OrderStatus, string> = {
 			'shipped': 'green',
 			'paid': 'green',
-			'pending': 'orange',
+			'pending payment': 'orange',
 			'open': 'blue',
-			'cancelled': 'gray'
+			'canceled': 'gray'
 		};
 
 		return statusColor[status];
