@@ -26,13 +26,16 @@
 				<template #top>
 					<h3 class="pt-3 px-4 text-h7">Latest Sales</h3>
 				</template>
+				<template #item.status="{ item }">
+					<v-chip :color="getStatusColor(item.order_status[0].title)">
+						<span class="item-status">{{ item.order_status[0].title }}</span>
+					</v-chip>
+				</template>
 				<template #item.orders="{ item }">
 					{{ item.products.length }}
 				</template>
-				<template #item.status="{ item }">
-					<v-chip :color="getStatusColor(item.status)">
-						<span class="item-status">{{ item.status }}</span>
-					</v-chip>
+				<template #item.customer="{ item }">
+					{{ item.user.first_name }} {{ item.user.last_name }}
 				</template>
 			</v-data-table>
 		</div>
@@ -44,7 +47,15 @@ import Order, { OrderStatus } from '@/types/Order';
 import { Vue, Component } from 'vue-property-decorator';
 import { getOrderDashboard, getOrders } from '@/store/modules/orders';
 
-@Component
+import Order, { OrderStatus } from '@/types/Order';
+import { getMonth } from '@/helpers';
+
+interface SaleSummary {
+	total: number;
+	icon: string;
+	desc: string;
+}
+
 export default class Dashboard extends Vue {
 	private activePeriod = 'today';
 
@@ -53,6 +64,42 @@ export default class Dashboard extends Vue {
 		{ total: '$2.403', icon: 'cart', desc: 'Orders this month' },
 		{ total: '$1.224', icon: 'currency-usd', desc: 'Potential earnings' }
 	];
+
+
+	get accumulatedSales(): SaleSummary[] {
+		return [
+			{ 
+				total: this.orders.reduce((acc, { order_status, amount }) => {
+					if (order_status[0].title === OrderStatus.PAID || order_status[0].title === OrderStatus.SHIPPED) {
+						acc += amount;
+					}
+					return acc;
+				}, 0),
+				icon: 'currency-usd', 
+				desc: 'Total Earnings' 
+			},
+			{ 
+				total: this.orders.reduce((acc, order) => {
+					if (getMonth(order.created_at) === new Date().getMonth()) {
+						acc += order.amount;
+					}
+					return acc
+				}, 0), 
+				icon: 'cart', 
+				desc: 'Orders this month' 
+			},
+			{
+				total: this.orders.reduce((acc, { order_status, amount }) => {
+					if (order_status[0].title !== OrderStatus.PAID && order_status[0].title !== OrderStatus.SHIPPED) {
+						acc += amount;
+					}
+					return acc;
+				}, 0),
+				icon: 'currency-usd', 
+				desc: 'Potential earnings'
+			}
+		]
+	}
 
 	private salesHeaders = [
 		{ text: 'Order UUID', value: 'uuid' },
