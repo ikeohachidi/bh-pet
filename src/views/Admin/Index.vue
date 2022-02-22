@@ -29,6 +29,10 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 
+import { fetchUserData, getUserData } from '@/store/modules/user';
+
+import User from '@/types/User';
+
 @Component
 export default class AdminIndex extends Vue {
 	private adminRoutes = [
@@ -41,6 +45,19 @@ export default class AdminIndex extends Vue {
 
 	get showNavigation(): boolean {
 		return this.$route.meta?.showNavigation ?? true;
+	}
+
+	get user(): User {
+		return getUserData(this.$store);
+	}
+
+	mounted(): void {
+		if (!this.user.uuid) {
+			fetchUserData(this.$store)
+				.catch(() => {
+					this.$router.push({ path: '/admin/login' });
+				})
+		}
 	}
 }
 </script>
