@@ -86,6 +86,7 @@ import Order, { OrderStatus } from '@/types/Order';
 import User from '@/types/User';
 
 import { getUserData } from '@/store/modules/user';
+import { downloadOrderInvoice, fetchUserOrders, getOrders } from '@/store/modules/orders';
 
 import { formatTextToDate } from '@/helpers'
 
@@ -109,12 +110,10 @@ export default class UserSettings extends Vue {
 		{ text: 'Download Invoice', value: 'invoice' },
 	];
 
-	private orders: Pick<Order, 'uuid' | 'status'>[] = [
-		{ uuid: '490293032232', status: 'open' },
-		{ uuid: '490293032232', status: 'pending' },
-		{ uuid: '490293032232', status: 'paid' },
-		{ uuid: '490293032232', status: 'shipped' },
-	];
+
+	get orders(): Order[] {
+		return getOrders(this.$store);
+	}
 
 	private getStatusColor(status: OrderStatus): string {
 		const statusColor: Record<OrderStatus, string> = {
@@ -130,6 +129,12 @@ export default class UserSettings extends Vue {
 
 	private close() {
 		this.$emit('close');
+	}
+
+	mounted(): void {
+		if (this.orders.length === 0) {
+			fetchUserOrders(this.$store);
+		}
 	}
 }
 </script>
