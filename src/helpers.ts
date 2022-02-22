@@ -15,3 +15,7 @@ export const formatTextToDate = (text: string): string => {
 export const getMonth = (text: string): number => {
 	return dayjs(text).month();
 }
+
+export const getYear = (text: string): number => {
+	return dayjs(text).month();
+}
