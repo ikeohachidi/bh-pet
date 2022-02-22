@@ -3,15 +3,20 @@ import User from "./User";
 
 export enum OrderStatus {
 	OPEN = 'open',
-	PENDING = 'pending',
+	PENDING = 'pending payment',
 	PAID = 'paid',
 	SHIPPED = 'shipped',
-	CANCELLED = 'cancelled'
+	CANCELLED = 'canceled'
 }
 
 export default interface Order {
 	uuid: string;
-	status: OrderStatus | string;
+	order_status: {
+		created_at: string;
+		title: OrderStatus;
+		updated_at: string;
+		uuid: string;
+	}[];
 	amount: number;
 	created_at: string;
 	delivery_fee: number;

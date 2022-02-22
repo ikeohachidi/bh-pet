@@ -75,7 +75,7 @@ export default class PaymentMethod extends Vue {
 	@Prop({ default: PaymentType.CARD }) selectedMethod!: PaymentType;
 	@Prop({ default: false }) useShippingDetails!: boolean;
 
-	onShippingDetailsChange(value: boolean) {
+	onShippingDetailsChange(value: boolean): void {
 		this.$emit('update:useShippingDetails', value);
 	}
 

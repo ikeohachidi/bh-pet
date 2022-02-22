@@ -49,7 +49,7 @@ export default class App extends Vue {
 		this.showLogin = true;
 	}
 
-	mounted() {
+	mounted(): void {
 		fetchUserData(this.$store)
 	}
 }

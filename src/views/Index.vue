@@ -46,6 +46,8 @@ import Category from '@/types/Category';
 import Product from '@/types/Product';
 import { getRandomNumber } from '@/helpers';
 
+type ProductCategory = (Category & { products: Product[] });
+
 @Component({
 	components: {
 		ProductCard
@@ -73,7 +75,7 @@ export default class Index extends Vue {
 		return [first, second];
 	}
 
-	get categoryProducts() {
+	get categoryProducts(): ProductCategory[] {
 
 		const id = '21d5d1c3-f867-31e8-8e98-3a4820089037';
 		const values: (Category & { products: Product[] })[] = [

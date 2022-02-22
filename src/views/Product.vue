@@ -35,7 +35,7 @@ export default class Product extends Vue {
 		})
 	}
 
-	mounted() {
+	mounted(): void {
 		if (!this.product) {
 			fetchProductData(this.$store, this.productId)
 		}
