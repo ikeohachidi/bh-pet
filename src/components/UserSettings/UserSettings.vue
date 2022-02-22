@@ -110,6 +110,9 @@ export default class UserSettings extends Vue {
 		{ text: 'Download Invoice', value: 'invoice' },
 	];
 
+	private downloadInvoice(order: Order) {
+		downloadOrderInvoice(this.$store, order);
+	}
 
 	get orders(): Order[] {
 		return getOrders(this.$store);
