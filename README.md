@@ -1,5 +1,18 @@
 # vue2-pet-shop
 
+# Docker 
+
+## Build the image
+```
+docker build -t <image_name> .
+```
+
+## Run the image
+```
+docker run -p 8080:8080 --name <container_name> <image_name>
+```
+
+# NPM
 ## Project setup
 ```
 npm install
