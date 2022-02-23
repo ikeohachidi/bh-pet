@@ -68,23 +68,24 @@ export default class Index extends Vue {
 		return getCategories(this.$store);
 	}
 
-	get randomCategories(): number[] {
-		const first = getRandomNumber(this.categories.length, []);
-		const second = getRandomNumber(this.categories.length, [first]);
-
-		return [first, second];
-	}
-
 	get categoryProducts(): ProductCategory[] {
+		let values: ProductCategory[] = []
+		
+		if (this.categories.length > 0) {
 
-		const id = '21d5d1c3-f867-31e8-8e98-3a4820089037';
-		const values: (Category & { products: Product[] })[] = [
-			{
-				...this.categories[0],
-				uuid: id,
-				products: getProductsByCategoryId(this.$store)(id).slice(0, 5)
-			}
-		];
+			const rand1 = getRandomNumber(this.categories.length - 1, []);
+			const rand2 = getRandomNumber(this.categories.length - 1, [rand1]);
+
+			[rand1, rand2].forEach(randomInt => {
+				const cat = this.categories[randomInt];
+
+				values.push({
+					...cat,
+					uuid: cat.uuid,
+					products: getProductsByCategoryId(this.$store)(cat.uuid!).slice(0, 5)
+				})
+			})
+		}
 
 		return values;
 	}
